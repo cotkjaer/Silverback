@@ -38,10 +38,10 @@ public func **= (inout left: Double, right: Double) { left = left ** right }
 
 
 infix operator >?= { associativity right precedence 90 }
-///Assign right to left only if right > left
+/// Assign right to left only if right > left
 public func >?= <T:Comparable>(inout left: T, right: T) { if right > left { left = right } }
 
-///Assign right to left only if check(left,right) is true
+/// Assign right to left only if check(left,right) is true
 public func conditionalAssign<T:Comparable>(inout left: T, right: T, check: ((T,T) -> Bool)) { if check(left,right) { left = right } }
 
 ///Wrap try catch log in one go
@@ -49,8 +49,6 @@ public func tryCatchLog(call: (() throws ->()))
 {
     do { try call() } catch let e as NSError { debugPrint(e) } catch { debugPrint("caught unknown error") }
 }
-
-
 
 public func box<T : Comparable>(n: T, mi: T, ma: T) -> T
 {
