@@ -10,6 +10,9 @@
 		8FC4C2CB1BA9AEA8004639E5 /* Silverback.h in Headers */ = {isa = PBXBuildFile; fileRef = 8FC4C2CA1BA9AEA8004639E5 /* Silverback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8FC4C2D21BA9AEA8004639E5 /* Silverback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FC4C2C71BA9AEA8004639E5 /* Silverback.framework */; };
 		8FC4C2D71BA9AEA8004639E5 /* SilverbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC4C2D61BA9AEA8004639E5 /* SilverbackTests.swift */; };
+		8FC4C2E21BA9B07C004639E5 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC4C2E11BA9B07C004639E5 /* Operators.swift */; };
+		8FC4C2E31BA9B07D004639E5 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC4C2E11BA9B07C004639E5 /* Operators.swift */; };
+		8FC4C2E61BA9B0B6004639E5 /* OperatorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC4C2E51BA9B0B6004639E5 /* OperatorsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +32,8 @@
 		8FC4C2D11BA9AEA8004639E5 /* SilverbackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SilverbackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FC4C2D61BA9AEA8004639E5 /* SilverbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SilverbackTests.swift; sourceTree = "<group>"; };
 		8FC4C2D81BA9AEA8004639E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8FC4C2E11BA9B07C004639E5 /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
+		8FC4C2E51BA9B0B6004639E5 /* OperatorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperatorsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +76,7 @@
 		8FC4C2C91BA9AEA8004639E5 /* Silverback */ = {
 			isa = PBXGroup;
 			children = (
+				8FC4C2E41BA9B082004639E5 /* Swift */,
 				8FC4C2CA1BA9AEA8004639E5 /* Silverback.h */,
 				8FC4C2CC1BA9AEA8004639E5 /* Info.plist */,
 			);
@@ -81,9 +87,18 @@
 			isa = PBXGroup;
 			children = (
 				8FC4C2D61BA9AEA8004639E5 /* SilverbackTests.swift */,
+				8FC4C2E51BA9B0B6004639E5 /* OperatorsTests.swift */,
 				8FC4C2D81BA9AEA8004639E5 /* Info.plist */,
 			);
 			path = SilverbackTests;
+			sourceTree = "<group>";
+		};
+		8FC4C2E41BA9B082004639E5 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				8FC4C2E11BA9B07C004639E5 /* Operators.swift */,
+			);
+			name = Swift;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,6 +157,7 @@
 		8FC4C2BE1BA9AEA7004639E5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Christian Otkjær";
 				TargetAttributes = {
@@ -193,6 +209,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8FC4C2E21BA9B07C004639E5 /* Operators.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,6 +218,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FC4C2D71BA9AEA8004639E5 /* SilverbackTests.swift in Sources */,
+				8FC4C2E31BA9B07D004639E5 /* Operators.swift in Sources */,
+				8FC4C2E61BA9B0B6004639E5 /* OperatorsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +326,7 @@
 		8FC4C2DC1BA9AEA8004639E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -317,12 +337,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.silverback-it.Silverback";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		8FC4C2DD1BA9AEA8004639E5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -375,6 +397,7 @@
 				8FC4C2DD1BA9AEA8004639E5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8FC4C2DE1BA9AEA8004639E5 /* Build configuration list for PBXNativeTarget "SilverbackTests" */ = {
 			isa = XCConfigurationList;
@@ -383,6 +406,7 @@
 				8FC4C2E01BA9AEA8004639E5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
