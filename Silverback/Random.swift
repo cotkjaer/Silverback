@@ -9,6 +9,24 @@
 import Foundation
 import UIKit
 
+
+public extension Int
+{
+    /**
+    Random integer in the open range [_lower_;_upper_[, ie. an integer between lower (_inclusive_) and upper (_exclusive_)
+    
+    NB! _lower_ **must** be less than _upper_
+    
+    - parameter lower: lower limit - inclusive
+    - parameter upper: upper limit - exclusive
+    - returns: Random integer in the open range [_lower_;_upper_[
+    */
+    static func random(lower lower: Int = min, upper: Int = max) -> Int
+    {
+        return Int(Int64.random(Int64(lower), upper: Int64(upper)))
+    }
+}
+
 /**
 Arc Random for Double and Float
 */
@@ -17,23 +35,10 @@ public func arc4random <T: IntegerLiteralConvertible> (type: T.Type) -> T
     var r: T = 0
     
     arc4random_buf(&r, sizeof(T))
+    
     return r
 }
 
-public extension Int
-{
-    /**
-    Random integer between lower and upper (inclusive).
-    
-    - parameter lower: Minimum value to return
-    - parameter upper: Maximum value to return
-    - returns: Random integer
-    */
-    static func random(lower lower: Int = min, upper: Int = max) -> Int
-    {
-        return Int(Int64.random(Int64(lower), upper: Int64(upper)))
-    }
-}
 
 public extension UInt64
 {
@@ -120,4 +125,16 @@ public extension Double
     }
 }
 
+// MARK: - Random Color
+
+extension UIColor
+{
+    static func randomColor() -> UIColor
+    {
+        return UIColor(red: CGFloat(Double.random(lower: 0, upper: 1)),
+            green: CGFloat(Double.random(lower: 0, upper: 1)),
+            blue: CGFloat(Double.random(lower: 0, upper: 1)),
+            alpha: 1)
+    }
+}
 

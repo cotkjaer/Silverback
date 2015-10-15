@@ -8,10 +8,15 @@
 
 import Foundation
 
-public func hash(seed seed: Int = 11, hashValues: Int...) -> Int
+public func hash(seed seed: Int = 11, hashValuesArray: [Int]) -> Int
 {
-    return hashValues.reduce(0, combine: { (combinedHashValue, hashValue) -> Int in
+    return hashValuesArray.reduce(0, combine: { (combinedHashValue, hashValue) -> Int in
         
         return seed &* combinedHashValue &+ hashValue
     })
+}
+
+public func hash(seed seed: Int = 11, _ hashValues: Int...) -> Int
+{
+    return hash(seed: seed, hashValuesArray:hashValues)
 }

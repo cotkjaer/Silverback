@@ -42,7 +42,14 @@ infix operator >?= { associativity right precedence 90 }
 public func >?= <T:Comparable>(inout left: T, right: T) { if right > left { left = right } }
 
 /// Assign right to left only if check(left,right) is true
-public func conditionalAssign<T:Comparable>(inout left: T, right: T, check: ((T,T) -> Bool)) { if check(left,right) { left = right } }
+public func conditionalAssign<T:Comparable>(inout left: T, right: T,@noescape check: ((T,T) -> Bool)) { if check(left,right) { left = right } }
+
+infix operator ><= { associativity right precedence 90 }
+/// Assign `right` to `left` only if `left` is not already equal to `right`
+public func ><= <T:Equatable>(inout left: T, right: T)
+{
+    if left != right { left = right }
+}
 
 ///Wrap try catch log in one go
 public func tryCatchLog(call: (() throws ->()))
@@ -58,3 +65,21 @@ public func box<T : Comparable>(n: T, mi: T, ma: T) -> T
     return min(realMax, max(realMin, n))
 }
 
+/// Matches operator, it may be declared for various entities that can be said to "match" in some way
+infix operator ~~ { associativity left precedence 160 }
+
+/// The inverse of the _matches operator_
+infix operator !~ { associativity left precedence 160 }
+
+
+///Protocol to describe dynamic equatable properties
+protocol OptionalEquatable
+{
+    func equals(thing: Any?) -> Bool
+}
+
+///Protocol to describe dynamically comparable entities - good for comparing objects in a hierarchy
+protocol OptionalComparable
+{
+    func lessThan(thing: Any?) -> Bool
+}
