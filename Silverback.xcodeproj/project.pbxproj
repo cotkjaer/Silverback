@@ -50,6 +50,9 @@
 		8F5679D51BBE65D400F833A7 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5679D41BBE65D400F833A7 /* CircleView.swift */; settings = {ASSET_TAGS = (); }; };
 		8F5679E41BBE8A6B00F833A7 /* NotificationHandlerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5679E31BBE8A6B00F833A7 /* NotificationHandlerManager.swift */; settings = {ASSET_TAGS = (); }; };
 		8F5679E61BBE8A8600F833A7 /* NSNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5679E51BBE8A8600F833A7 /* NSNotification.swift */; settings = {ASSET_TAGS = (); }; };
+		8F5CFB441BCFF8E100029D0C /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5CFB431BCFF8E100029D0C /* UIViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		8F6768781BD0F58C0094C7A8 /* CircleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6768771BD0F58C0094C7A8 /* CircleCell.swift */; settings = {ASSET_TAGS = (); }; };
+		8F67690D1BD111620094C7A8 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F67690C1BD111620094C7A8 /* UIImage.swift */; settings = {ASSET_TAGS = (); }; };
 		8F71F8501BCEA35000A63C14 /* DiscreteValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F71F84F1BCEA35000A63C14 /* DiscreteValue.swift */; settings = {ASSET_TAGS = (); }; };
 		8F8149D01BC3A8A60013AFFE /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8149CF1BC3A8A60013AFFE /* UIColor.swift */; settings = {ASSET_TAGS = (); }; };
 		8FB61EFD1BA9E9B50034E54F /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB61EFC1BA9E9B50034E54F /* Debug.swift */; };
@@ -130,6 +133,9 @@
 		8F5679D41BBE65D400F833A7 /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
 		8F5679E31BBE8A6B00F833A7 /* NotificationHandlerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationHandlerManager.swift; sourceTree = "<group>"; };
 		8F5679E51BBE8A8600F833A7 /* NSNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSNotification.swift; sourceTree = "<group>"; };
+		8F5CFB431BCFF8E100029D0C /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		8F6768771BD0F58C0094C7A8 /* CircleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleCell.swift; sourceTree = "<group>"; };
+		8F67690C1BD111620094C7A8 /* UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		8F71F84F1BCEA35000A63C14 /* DiscreteValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscreteValue.swift; sourceTree = "<group>"; };
 		8F8149CF1BC3A8A60013AFFE /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		8FB61EFC1BA9E9B50034E54F /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
@@ -208,6 +214,7 @@
 				8F5679D41BBE65D400F833A7 /* CircleView.swift */,
 				8F4E7D071BC26C4900A9FD25 /* CircleLabel.swift */,
 				8FC3668C1BC5BF07003ADE80 /* GradientView.swift */,
+				8F6768771BD0F58C0094C7A8 /* CircleCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -225,7 +232,9 @@
 		8F8149D11BC3A8B40013AFFE /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				8F67690C1BD111620094C7A8 /* UIImage.swift */,
 				8F8149CF1BC3A8A60013AFFE /* UIColor.swift */,
+				8F5CFB431BCFF8E100029D0C /* UIViewController.swift */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -428,6 +437,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F6768781BD0F58C0094C7A8 /* CircleCell.swift in Sources */,
+				8F67690D1BD111620094C7A8 /* UIImage.swift in Sources */,
 				8F4E7D131BC26E8E00A9FD25 /* CGAffineTransform.swift in Sources */,
 				8F1281031BCC1C4B00F0B005 /* Hashable.swift in Sources */,
 				8F71F8501BCEA35000A63C14 /* DiscreteValue.swift in Sources */,
@@ -450,6 +461,7 @@
 				8FF0757E1BC65B9A008A912A /* ByteBuffer.swift in Sources */,
 				8F4E7D1D1BC26E8E00A9FD25 /* CGSize.swift in Sources */,
 				8FB61F251BA9FEE80034E54F /* Array.swift in Sources */,
+				8F5CFB441BCFF8E100029D0C /* UIViewController.swift in Sources */,
 				8F4E7D171BC26E8E00A9FD25 /* CGFloat.swift in Sources */,
 				8F4E7D1F1BC26E8E00A9FD25 /* CGVector.swift in Sources */,
 				8F5679D51BBE65D400F833A7 /* CircleView.swift in Sources */,

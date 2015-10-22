@@ -109,5 +109,25 @@ extension UIColor
         
         return nil
     }
+}
 
+//MARK: - Image
+
+public extension UIColor
+{
+    public var image: UIImage
+        {
+            let rect = CGRectMake(0, 0, 1, 1)
+            
+            UIGraphicsBeginImageContextWithOptions(rect.size, opaque, 0)
+            
+            let context = UIGraphicsGetCurrentContext()
+            
+            CGContextSetFillColorWithColor(context, self.CGColor)
+            CGContextFillRect(context, rect)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return image
+    }
 }

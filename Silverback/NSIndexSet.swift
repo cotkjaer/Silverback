@@ -16,7 +16,7 @@ extension NSIndexSet
     {
         let mutable = NSMutableIndexSet()
         
-        indicies.forEach({mutable.addIndex($0)})
+        indicies.forEach { mutable.addIndex($0) }
         
         self.init(indexSet: mutable)
     }
@@ -25,7 +25,7 @@ extension NSIndexSet
         {
             var set = Set<Int>()
         
-            enumerateIndexesUsingBlock({ set.insert($0.0) })
+            enumerateIndexesUsingBlock { set.insert($0.0) }
         
             return set
     }
