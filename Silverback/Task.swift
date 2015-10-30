@@ -9,7 +9,7 @@
 import Foundation
 
 /// A class that encapsulates a closure and enables scheduling
-class Task
+public class Task
 {
     // The captured by the block dispatched to GCD needs to match this secret to alow execution of the closure
     private var secret = 0
@@ -21,7 +21,7 @@ class Task
     
     /// Capture and retain a closure
     /// - parameter closure : closure to capture
-    init(_ closure:()->())
+    public init(_ closure:()->())
     {
         self.closure = closure
     }
@@ -30,7 +30,7 @@ class Task
     /// - parameter delay : time to delay execution of _closure_
     /// - parameter closure : closure to capture
     /// If the delay is negative the task is scheduled to execute in 0.1 seconds
-    convenience init(delay:Double, closure:()->())
+    public convenience init(delay:Double, closure:()->())
     {
         self.init(closure)
         schedule(delay)
@@ -40,14 +40,14 @@ class Task
     /// - parameter date : the date to wait for before executing _closure_
     /// - parameter closure : closure to capture
     /// If the date is in the past the closure is scheduled to execute in 0.1 seconds
-    convenience init(date:NSDate, closure:()->())
+    public convenience init(date:NSDate, closure:()->())
     {
         self.init(closure)
         schedule(date)
     }
     
     /// Unschedule all schedulled executions of captured closure
-    func unschedule()
+    public func unschedule()
     {
         scheduled = 0
         secret++
@@ -58,7 +58,7 @@ class Task
     /// - parameter after : time to delay execution of task
     ///
     /// If the delay is negative the task is scheduled to execute in 0.1 seconds
-    func schedule(after: Double)
+    public func schedule(after: Double)
     {
         let capturedSecret = secret
         
@@ -72,7 +72,7 @@ class Task
     /// - parameter after : time to delay execution of task
     ///
     /// If the delay is negative the task is scheduled to execute in 0.1 seconds
-    func scheduleIfNeeded(after: Double = 0.1)
+    public func scheduleIfNeeded(after: Double = 0.1)
     {
         if scheduled < 1
         {
@@ -85,7 +85,7 @@ class Task
     /// - parameter after : time to delay execution of task
     ///
     /// If the delay is negative the task is scheduled to execute in 0.1 seconds
-    func reschedule(after: Double)
+    public func reschedule(after: Double)
     {
         unschedule()
         
@@ -98,7 +98,7 @@ class Task
     /// - parameter date : the date to wait for before executing task
     ///
     /// If the date is in the past the task is scheduled to execute in 0.1 seconds
-    func schedule(date: NSDate)
+    public func schedule(date: NSDate)
     {
         schedule(max(0.1, date.timeIntervalSinceNow))
     }
@@ -108,7 +108,7 @@ class Task
     /// - parameter date : the date to wait for before executing task
     ///
     /// If the date is in the past the task is scheduled to execute in 0.1 seconds
-    func reschedule(date: NSDate)
+    public func reschedule(date: NSDate)
     {
         unschedule()
         
@@ -116,7 +116,7 @@ class Task
     }
     
     /// Ececutes the closure now
-    func execute()
+    public func execute()
     {
         closure()
     }

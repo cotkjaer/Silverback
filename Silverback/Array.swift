@@ -8,17 +8,17 @@
 
 import Foundation
 
-internal func flatMap<T, U>(array: [T], f: (T) -> ([U])) -> [U]
-{
-    return flatten(array.map(f))
-}
-
-public func flatten<T>(array: [[T]]) -> [T]
-{
-    return array.reduce([], combine: +)
-}
-
-
+//internal func flatMap<T, U>(array: [T], f: (T) -> ([U])) -> [U]
+//{
+//    return flatten(array.map(f))
+//}
+//
+//public func flatten<T>(array: [[T]]) -> [T]
+//{
+//    return array.reduce([], combine: +)
+//}
+//
+//
 
 // MARK: - Safe versions of standard array operations
 public extension Array
@@ -26,26 +26,6 @@ public extension Array
     @warn_unused_result func map<U>(transform: Element -> U?) -> Array<U>
     {
         return flatMap(transform)
-        
-//        return reduce(Array<U>(), combine: { (var array, e) -> Array<U> in
-//            if let ee = transform(e)
-//            {
-//                array.append(ee)
-//            }
-//            return array
-//        })
-        
-//        var array = Array<U>()
-//        
-//        for e in self
-//        {
-//            if let ee = transform(e)
-//            {
-//                array.append(ee)
-//            }
-//        }
-//        
-//        return array
     }
     
     /**
@@ -70,7 +50,7 @@ public extension Array
 
 // MARK: - Optional versions of standard methods
 
-extension Array where Element : Equatable
+public extension Array where Element : Equatable
 {
     ///Returns the first index where `optionalElement` appears in `self` or `nil` if `optionalElement` is not found.
     public func indexOf(optionalElement: Element?) -> Index?
@@ -103,7 +83,7 @@ public extension Array
         return nil
     }
 
-    public var tail : Array<Element>?
+    var tail : Array<Element>?
         {
             switch count
             {
@@ -115,54 +95,34 @@ public extension Array
             }
     }
     
-    public var head : Element? { return first }
+    var head : Element? { return first }
 }
 
-
-//public func tail<T>(array: Array<T>?) -> Array<T>?
+//// MARK: - Set-like operations
+//public func intersect<E: Equatable>(arrays: [E]...) -> [E]
 //{
-//    let count = array?.count ?? 0
-//
-//    if count > 1
+//    switch arrays.count
 //    {
-//        return array![1 ..< count]
+//    case 0:
+//        return []
+//        
+//    case 1:
+//        return arrays[0]
+//        
+//    case 2:
+//        
+//        return arrays[0].filter({ arrays[1].indexOf($0) != nil })
+//        
+//    default:
+//        
+//        return arrays.reduce(arrays[0], combine: { (intersection, array) -> [E] in
+//            intersection.filter({ array.indexOf($0) != nil })
+//        })
 //    }
-//
-//    return nil
 //}
-//
-//public func head<T>(array: Array<T>?) -> T?
-//{
-//    return array?.first
-//}
-
-// MARK: - Set-like operations
-public func intersect<E: Equatable>(arrays: [E]...) -> [E]
-{
-    switch arrays.count
-    {
-    case 0:
-        return []
-        
-    case 1:
-        return arrays[0]
-        
-    case 2:
-        
-        return arrays[0].filter({ arrays[1].indexOf($0) != nil })
-        
-    default:
-        
-        return arrays.reduce(arrays[0], combine: { (intersection, array) -> [E] in
-            intersection.filter({ array.indexOf($0) != nil })
-        })
-    }
-}
 
 public extension Array
 {
-    //    private var indexesInterval: HalfOpenInterval<Int> { return HalfOpenInterval<Int>(0, self.count) }
-    
     /**
     Creates a dictionary with an optional entry for every element in the array.
     
@@ -182,7 +142,6 @@ public extension Array
             return dictionary
         }
     }
-
     
     /**
     Creates a set with an optional entry for every element in the array. Calls _transform_ in the same sequence as a *for-in loop* would. The returned non-nil results are accumulated to the resulting set
@@ -200,21 +159,6 @@ public extension Array
             }
             return set
         }
-//
-//        
-//        var s = Set<E>()
-//        
-//        forEach({ _ in })
-//        
-//        for element in self
-//        {
-//            if let e = transform(element)
-//            {
-//                s.insert(e)
-//            }
-//        }
-//        
-//        return s
     }
     
     /**
@@ -243,19 +187,7 @@ public extension Array
     func find<T>(type: T.Type) -> T?
     {
         return find({$0 is T}) as? T
-//        for element in self
-//        {
-//            if let t = element as? T
-//            {
-//                return t
-//            }
-//        }
-//        
-//        return nil
     }
-    
-    
-    
     
     /**
     Randomly rearranges (shuffles) the elements of self using the [Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher–Yates_shuffle)
@@ -399,7 +331,7 @@ public extension Array
     - parameter n: Number of elements to take
     - returns: First n elements
     */
-    func take (n: Int) -> Array
+    func take(n: Int) -> Array
     {
         return Array(self[0..<Swift.max(0, n)])
     }
@@ -435,7 +367,7 @@ public extension Array
     
     - returns: Array of unique values
     */
-    func unique <T: Equatable> () -> [T]
+    func unique<T: Equatable>() -> [T]
     {
         var result = [T]()
         

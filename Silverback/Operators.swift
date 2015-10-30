@@ -83,3 +83,9 @@ protocol OptionalComparable
 {
     func lessThan(thing: Any?) -> Bool
 }
+
+@warn_unused_result
+public func avg<T: IntegerArithmeticType where T:IntegerLiteralConvertible>(vs: T...) -> T
+{
+    return vs.reduce(0) { return $0 + $1 }
+}

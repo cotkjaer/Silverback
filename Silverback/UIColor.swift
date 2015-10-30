@@ -20,7 +20,7 @@ extension UIColor
 
 private let FF = CGFloat(0xFF)
 
-extension UIColor
+public extension UIColor
 {
     convenience init(rgb:UInt)
     {
@@ -57,11 +57,15 @@ extension UIColor
         return (red, green, blue, alpha)
     }
 
+    var white : CGFloat
+        {
+            let rgb = self.rgb
+        return (rgb.red + rgb.green + rgb.blue) / CGFloat(3)
+    }
 }
 
-extension UIColor
+public extension UIColor
 {
-    
     var hsba : (CGFloat, CGFloat, CGFloat, CGFloat)? {
         var hue : CGFloat = 0
         var saturation : CGFloat = 0
@@ -129,5 +133,15 @@ public extension UIColor
             UIGraphicsEndImageContext()
             
             return image
+    }
+}
+
+//MARK: - Random
+
+public extension UIColor
+{
+    static func random() -> UIColor
+    {
+        return UIColor(r: Int.random(lower: 0,upper: 256), g: Int.random(lower: 0,upper: 256), b: Int.random(lower: 0,upper: 256))
     }
 }

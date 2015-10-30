@@ -8,7 +8,7 @@
 
 // MARK: - Iteration
 
-func max<S : SequenceType where S.Generator.Element:IntegerArithmeticType>(sequence: S) -> S.Generator.Element?
+public func max<S : SequenceType where S.Generator.Element:IntegerArithmeticType>(sequence: S) -> S.Generator.Element?
 {
     var max: S.Generator.Element? = nil
     
@@ -23,7 +23,7 @@ func max<S : SequenceType where S.Generator.Element:IntegerArithmeticType>(seque
     return max
 }
 
-func min<S : SequenceType where S.Generator.Element:IntegerArithmeticType>(sequence: S) -> S.Generator.Element?
+public func min<S : SequenceType where S.Generator.Element:IntegerArithmeticType>(sequence: S) -> S.Generator.Element?
 {
     var min: S.Generator.Element? = nil
     
@@ -40,7 +40,7 @@ func min<S : SequenceType where S.Generator.Element:IntegerArithmeticType>(seque
 
 
 
-extension SequenceType
+public extension SequenceType
 {
     ///Return true iff **any** of the elements in self satisfies `predicate`
     @warn_unused_result
@@ -143,7 +143,7 @@ public extension SequenceType where Generator.Element == String
     }
 }
 
-extension SequenceType where Generator.Element : CustomDebugStringConvertible
+public extension SequenceType where Generator.Element : CustomDebugStringConvertible
 {
     func debugDescription(separator: String, prefix: String, suffix: String = "") -> String
     {

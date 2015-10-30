@@ -21,6 +21,16 @@
 		8F1281031BCC1C4B00F0B005 /* Hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1281021BCC1C4B00F0B005 /* Hashable.swift */; };
 		8F1281051BCC1C6C00F0B005 /* HashableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1281041BCC1C6C00F0B005 /* HashableTests.swift */; };
 		8F1281061BCC1CB700F0B005 /* Hashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1281021BCC1C4B00F0B005 /* Hashable.swift */; };
+		8F3FC62A1BD8D3400095D45C /* HexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3FC6291BD8D3400095D45C /* HexView.swift */; };
+		8F3FC62C1BD8D4510095D45C /* HexCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3FC62B1BD8D4510095D45C /* HexCollectionViewFlowLayout.swift */; };
+		8F3FC62E1BD8D4820095D45C /* HexCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3FC62D1BD8D4820095D45C /* HexCollectionViewCell.swift */; };
+		8F3FC6301BD8DA330095D45C /* UIBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3FC62F1BD8DA330095D45C /* UIBezierPath.swift */; };
+		8F3FC6321BD8DB910095D45C /* Border.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3FC6311BD8DB910095D45C /* Border.swift */; };
+		8F3FC6341BD8E0040095D45C /* HexCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3FC6331BD8E0040095D45C /* HexCollectionViewLayout.swift */; };
+		8F3FC6361BD8E0760095D45C /* UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3FC6351BD8E0760095D45C /* UICollectionView.swift */; };
+		8F3FC6461BDA2F0A0095D45C /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3FC6451BDA2F0A0095D45C /* NSDate.swift */; };
+		8F3FC6481BDA2FF60095D45C /* CircleSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3FC6471BDA2FF60095D45C /* CircleSlider.swift */; };
+		8F3FC6581BDECE9A0095D45C /* NSTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3FC6571BDECE9A0095D45C /* NSTimer.swift */; };
 		8F4547A81BBD3CE9004DE5D2 /* NSIndexSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4547A71BBD3CE9004DE5D2 /* NSIndexSet.swift */; };
 		8F4547AB1BBD3E44004DE5D2 /* NSIndexSetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4547AA1BBD3E44004DE5D2 /* NSIndexSetTests.swift */; };
 		8F4547AC1BBD3E4B004DE5D2 /* NSIndexSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4547A71BBD3CE9004DE5D2 /* NSIndexSet.swift */; };
@@ -53,6 +63,7 @@
 		8F5CFB441BCFF8E100029D0C /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5CFB431BCFF8E100029D0C /* UIViewController.swift */; };
 		8F6768781BD0F58C0094C7A8 /* CircleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6768771BD0F58C0094C7A8 /* CircleCell.swift */; };
 		8F67690D1BD111620094C7A8 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F67690C1BD111620094C7A8 /* UIImage.swift */; };
+		8F6E93731BE39A4700B47D04 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6E93721BE39A4700B47D04 /* UILabel.swift */; };
 		8F8149D01BC3A8A60013AFFE /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8149CF1BC3A8A60013AFFE /* UIColor.swift */; };
 		8FB61EFD1BA9E9B50034E54F /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB61EFC1BA9E9B50034E54F /* Debug.swift */; };
 		8FB61EFF1BA9EA180034E54F /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FB61EFE1BA9EA180034E54F /* Hash.swift */; };
@@ -113,6 +124,16 @@
 		8F1280E81BCBB14200F0B005 /* ChoiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChoiceTests.swift; sourceTree = "<group>"; };
 		8F1281021BCC1C4B00F0B005 /* Hashable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hashable.swift; sourceTree = "<group>"; };
 		8F1281041BCC1C6C00F0B005 /* HashableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashableTests.swift; sourceTree = "<group>"; };
+		8F3FC6291BD8D3400095D45C /* HexView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexView.swift; sourceTree = "<group>"; };
+		8F3FC62B1BD8D4510095D45C /* HexCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		8F3FC62D1BD8D4820095D45C /* HexCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexCollectionViewCell.swift; sourceTree = "<group>"; };
+		8F3FC62F1BD8DA330095D45C /* UIBezierPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIBezierPath.swift; sourceTree = "<group>"; };
+		8F3FC6311BD8DB910095D45C /* Border.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Border.swift; sourceTree = "<group>"; };
+		8F3FC6331BD8E0040095D45C /* HexCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexCollectionViewLayout.swift; sourceTree = "<group>"; };
+		8F3FC6351BD8E0760095D45C /* UICollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UICollectionView.swift; sourceTree = "<group>"; };
+		8F3FC6451BDA2F0A0095D45C /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
+		8F3FC6471BDA2FF60095D45C /* CircleSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleSlider.swift; sourceTree = "<group>"; };
+		8F3FC6571BDECE9A0095D45C /* NSTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTimer.swift; sourceTree = "<group>"; };
 		8F4547A71BBD3CE9004DE5D2 /* NSIndexSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSIndexSet.swift; sourceTree = "<group>"; };
 		8F4547AA1BBD3E44004DE5D2 /* NSIndexSetTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSIndexSetTests.swift; sourceTree = "<group>"; };
 		8F4E7D071BC26C4900A9FD25 /* CircleLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleLabel.swift; sourceTree = "<group>"; };
@@ -135,6 +156,7 @@
 		8F5CFB431BCFF8E100029D0C /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		8F6768771BD0F58C0094C7A8 /* CircleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleCell.swift; sourceTree = "<group>"; };
 		8F67690C1BD111620094C7A8 /* UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		8F6E93721BE39A4700B47D04 /* UILabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		8F8149CF1BC3A8A60013AFFE /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		8FB61EFC1BA9E9B50034E54F /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		8FB61EFE1BA9EA180034E54F /* Hash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hash.swift; sourceTree = "<group>"; };
@@ -182,11 +204,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8F3FC6281BD8D3240095D45C /* CircleViews */ = {
+			isa = PBXGroup;
+			children = (
+				8F5679D41BBE65D400F833A7 /* CircleView.swift */,
+				8F4E7D071BC26C4900A9FD25 /* CircleLabel.swift */,
+				8F6768771BD0F58C0094C7A8 /* CircleCell.swift */,
+				8F3FC6471BDA2FF60095D45C /* CircleSlider.swift */,
+			);
+			name = CircleViews;
+			sourceTree = "<group>";
+		};
 		8F4547A91BBD3CEE004DE5D2 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
 				8F4547A71BBD3CE9004DE5D2 /* NSIndexSet.swift */,
 				8F5679E51BBE8A8600F833A7 /* NSNotification.swift */,
+				8F3FC6451BDA2F0A0095D45C /* NSDate.swift */,
+				8F3FC6571BDECE9A0095D45C /* NSTimer.swift */,
 			);
 			name = Foundation;
 			sourceTree = "<group>";
@@ -209,10 +244,13 @@
 		8F5679D61BBE65E100F833A7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				8F5679D41BBE65D400F833A7 /* CircleView.swift */,
-				8F4E7D071BC26C4900A9FD25 /* CircleLabel.swift */,
+				8F3FC6281BD8D3240095D45C /* CircleViews */,
 				8FC3668C1BC5BF07003ADE80 /* GradientView.swift */,
-				8F6768771BD0F58C0094C7A8 /* CircleCell.swift */,
+				8F3FC6291BD8D3400095D45C /* HexView.swift */,
+				8F3FC62D1BD8D4820095D45C /* HexCollectionViewCell.swift */,
+				8F3FC62B1BD8D4510095D45C /* HexCollectionViewFlowLayout.swift */,
+				8F3FC6331BD8E0040095D45C /* HexCollectionViewLayout.swift */,
+				8F3FC6311BD8DB910095D45C /* Border.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -233,6 +271,9 @@
 				8F67690C1BD111620094C7A8 /* UIImage.swift */,
 				8F8149CF1BC3A8A60013AFFE /* UIColor.swift */,
 				8F5CFB431BCFF8E100029D0C /* UIViewController.swift */,
+				8F3FC62F1BD8DA330095D45C /* UIBezierPath.swift */,
+				8F3FC6351BD8E0760095D45C /* UICollectionView.swift */,
+				8F6E93721BE39A4700B47D04 /* UILabel.swift */,
 			);
 			name = UIKit;
 			sourceTree = "<group>";
@@ -435,14 +476,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F6768781BD0F58C0094C7A8 /* CircleCell.swift in Sources */,
+				8F3FC6321BD8DB910095D45C /* Border.swift in Sources */,
+				8F3FC6481BDA2FF60095D45C /* CircleSlider.swift in Sources */,
 				8F67690D1BD111620094C7A8 /* UIImage.swift in Sources */,
 				8F4E7D131BC26E8E00A9FD25 /* CGAffineTransform.swift in Sources */,
 				8F1281031BCC1C4B00F0B005 /* Hashable.swift in Sources */,
 				8FF0757C1BC652B2008A912A /* Buffer.swift in Sources */,
 				8F8149D01BC3A8A60013AFFE /* UIColor.swift in Sources */,
 				8FB61F231BA9FEE80034E54F /* Set.swift in Sources */,
+				8F3FC6301BD8DA330095D45C /* UIBezierPath.swift in Sources */,
 				8F5679E41BBE8A6B00F833A7 /* NotificationHandlerManager.swift in Sources */,
+				8F3FC62A1BD8D3400095D45C /* HexView.swift in Sources */,
 				8F0147AC1BAA15EF001ED3CF /* SequenceType.swift in Sources */,
+				8F3FC6341BD8E0040095D45C /* HexCollectionViewLayout.swift in Sources */,
 				8F4E7D191BC26E8E00A9FD25 /* CGPoint.swift in Sources */,
 				8FB61EFF1BA9EA180034E54F /* Hash.swift in Sources */,
 				8FB61EFD1BA9E9B50034E54F /* Debug.swift in Sources */,
@@ -454,23 +500,29 @@
 				8F4E7D0A1BC26D3900A9FD25 /* Geometry.swift in Sources */,
 				8FB61F1F1BA9FEE80034E54F /* Float.swift in Sources */,
 				8F1280E61BCB81A700F0B005 /* Choice.swift in Sources */,
+				8F3FC62C1BD8D4510095D45C /* HexCollectionViewFlowLayout.swift in Sources */,
 				8FF0757E1BC65B9A008A912A /* ByteBuffer.swift in Sources */,
 				8F4E7D1D1BC26E8E00A9FD25 /* CGSize.swift in Sources */,
 				8FB61F251BA9FEE80034E54F /* Array.swift in Sources */,
 				8F5CFB441BCFF8E100029D0C /* UIViewController.swift in Sources */,
+				8F6E93731BE39A4700B47D04 /* UILabel.swift in Sources */,
 				8F4E7D171BC26E8E00A9FD25 /* CGFloat.swift in Sources */,
 				8F4E7D1F1BC26E8E00A9FD25 /* CGVector.swift in Sources */,
 				8F5679D51BBE65D400F833A7 /* CircleView.swift in Sources */,
 				8FB61F211BA9FEE80034E54F /* Bool.swift in Sources */,
 				8F4547A81BBD3CE9004DE5D2 /* NSIndexSet.swift in Sources */,
+				8F3FC6361BD8E0760095D45C /* UICollectionView.swift in Sources */,
 				8FB61F1D1BA9FEE80034E54F /* String.swift in Sources */,
 				8FB61F011BA9EA360034E54F /* Async.swift in Sources */,
 				8F1280CD1BC6800800F0B005 /* GenericIntegerType.swift in Sources */,
+				8F3FC62E1BD8D4820095D45C /* HexCollectionViewCell.swift in Sources */,
 				8FB61F271BA9FEE80034E54F /* Double.swift in Sources */,
+				8F3FC6461BDA2F0A0095D45C /* NSDate.swift in Sources */,
 				8FF075781BC6441F008A912A /* Queue.swift in Sources */,
 				8F4E7D151BC26E8E00A9FD25 /* CGContext.swift in Sources */,
 				8FC3668D1BC5BF07003ADE80 /* GradientView.swift in Sources */,
 				8F4F85401BAC3D6C0001AAE9 /* Task.swift in Sources */,
+				8F3FC6581BDECE9A0095D45C /* NSTimer.swift in Sources */,
 				8FF0757A1BC64668008A912A /* List.swift in Sources */,
 				8FC4C36B1BA9DB55004639E5 /* Random.swift in Sources */,
 			);
@@ -573,7 +625,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -615,7 +667,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

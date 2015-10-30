@@ -8,54 +8,15 @@
 
 import UIKit
 
-class CircleView: UIView
+@IBDesignable
+public class CircleView: UIView
 {
-    enum BorderWidth
-    {
-        case Relative(CGFloat)
-        case Absolute(CGFloat)
-        case None
-        case Thin
-        case Normal
-        case Thick
-        
-        func widthForRadius(radius: CGFloat) -> CGFloat
-        {
-            var borderWidth : CGFloat = 0
-            
-            let scale = UIScreen.mainScreen().scale
-
-            switch self
-            {
-            case .Absolute(let width):
-                borderWidth = max(1/scale, min(radius, width))
-                
-            case .Relative(let factor):
-                borderWidth = max(1/scale, min(radius, radius*factor))
-                
-            case .None:
-                borderWidth = 0
-                
-            case .Thin:
-                borderWidth = 1
-                
-            case .Normal:
-                borderWidth = 2
-                
-            case .Thick:
-                borderWidth = 5
-                
-            }
-            
-            return floor(borderWidth) / scale
-        }
-    }
+    public var borderWidth = BorderWidth.Normal { didSet { updateBorder() } }
     
-    var borderWidth = BorderWidth.Normal { didSet { updateBorder() } }
+    @IBInspectable
+    public var borderColor :  UIColor? { didSet { updateLayerBorderColor() } }
     
-    var borderColor :  UIColor? { didSet { updateLayerBorderColor() } }
-    
-    override var bounds: CGRect { didSet { updateLayerCornerRadius() } }
+    override public var bounds: CGRect { didSet { updateLayerCornerRadius() } }
     
     private func setup()
     {
@@ -69,13 +30,13 @@ class CircleView: UIView
         setup()
     }
     
-    required init?(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         super.init(coder: aDecoder)
         setup()
     }
     
-    override func tintColorDidChange()
+    override public func tintColorDidChange()
     {
         super.tintColorDidChange()
         borderColor = tintColor
