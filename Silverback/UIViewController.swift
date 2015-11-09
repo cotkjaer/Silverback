@@ -25,7 +25,7 @@ extension UIViewController
     - parameter type: the (super)type of view-controller to look for
     - returns: the first controller in the parent-hierarchy encountered that is of the specified type
     */
-    func closestParentViewControllerOfType<T where T: UIViewController>(type: T.Type) -> T?
+    public func closestParentViewControllerOfType<T where T: UIViewController>(type: T.Type) -> T?
     {
         return (parentViewController as? T) ?? parentViewController?.closestParentViewControllerOfType(type)
     }
@@ -36,7 +36,7 @@ extension UIViewController
     - parameter type: the (super)type of controller to look for
     - returns: an array of view-controllers of the specified type
     */
-    func closestChildViewControllersOfType<T>(type: T.Type) -> [T]
+    public func closestChildViewControllersOfType<T>(type: T.Type) -> [T]
     {
         var children = childViewControllers
         
@@ -61,7 +61,7 @@ extension UIViewController
     - parameter type: the (super)type of controller to look for
     - returns: an array of view-controllers of the specified type
     */
-    func anyChildViewControllersOfType<T>(type: T.Type) -> T?
+    public func anyChildViewControllersOfType<T>(type: T.Type) -> T?
     {
         var children = childViewControllers
         
@@ -78,5 +78,74 @@ extension UIViewController
         }
         
         return nil
+    }
+}
+
+
+// MARK: - Hierarchy
+
+extension UIView
+{
+    /**
+     Ascends the superview hierarchy until a controller of the specified type is encountered
+     
+     - parameter type: the (super)type of view to look for
+     - returns: the first superview in the hierarchy encountered that is of the specified type
+     */
+    public func closestSuperviewOfType<T>(type: T.Type) -> T?
+    {
+        for var view = superview; view != nil; view = view?.superview
+        {
+            if let t = view as? T
+            {
+                return t
+            }
+        }
+        
+        return nil
+        
+//        return (superview as? T) ?? superview?.closestSuperviewOfType(type)
+    }
+    
+    public func subviewsOfType<T>(type: T.Type) -> [T]
+    {
+        return subviews.reduce(subviews.cast(T), combine: { $0 + $1.subviewsOfType(T) } )
+    }
+    
+    /**
+     does a breadth-first search of the subview hierarchy
+     
+     - parameter type: the (super)type of view to look for
+     - returns: an array of views of the specified type
+     */
+    public func closestSubviewsOfType<T>(type: T.Type) -> [T]
+    {
+        var views = subviews
+        
+        while !views.isEmpty
+        {
+            let Ts = views.cast(T)
+            
+            if !Ts.isEmpty
+            {
+                return Ts
+            }
+            
+            views = views.flatMap { $0.subviews }
+//            views = views.reduce([]) { $0 + $1.subviews }
+        }
+        
+        return []
+    }
+    
+    /**
+     does a breadth-first search of the subview hierarchy
+     
+     - parameter type: the type of view to look for
+     - returns: first view of the specified type found
+     */
+    public func firstSubviewOfType<T>(type: T.Type) -> T?
+    {
+        return closestSubviewsOfType(type).first
     }
 }

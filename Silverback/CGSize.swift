@@ -29,6 +29,12 @@ extension CGSize
     {
         return CGSize(width: width, height: height)
     }
+    
+    ///Returns *true* if `size` fits inside `self`
+    public func fits(size: CGSize) -> Bool
+    {
+        return width >= size.width && height >= size.height
+    }
 }
 
 // MARK: Equatable

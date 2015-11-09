@@ -11,3 +11,4 @@ import CoreGraphics
 
 public let π = CGFloat(M_PI)
 public let π2 = π * 2
+public let π_2 = π / 2
