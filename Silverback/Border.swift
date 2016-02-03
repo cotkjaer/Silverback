@@ -5,6 +5,105 @@
 //  Created by Christian Otkjær on 22/10/15.
 //  Copyright © 2015 Christian Otkjær. All rights reserved.
 //
+import UIKit
+
+public enum BorderType
+{
+    case Circle, Ellipse, SuperEllipse, Square, Rectangle, RoundedSquare(CGFloat)
+    
+    func pathForBounds(bounds: CGRect) -> UIBezierPath
+    {
+        switch self
+        {
+        case .Circle:
+            
+            let diameter = min(bounds.width, bounds.height) 
+            
+            return UIBezierPath(ovalInRect: CGRect(center: bounds.center, size: CGSize(widthAndHeight: diameter)))
+            
+        case .Ellipse:
+            
+            return UIBezierPath(ovalInRect: bounds)
+            
+        case .SuperEllipse:
+            
+            return UIBezierPath(superEllipseInRect: bounds)
+            
+        case .Rectangle:
+            
+            return UIBezierPath(rect: bounds)
+            
+        case .Square:
+            
+            let diameter = min(bounds.width, bounds.height)
+            
+            return UIBezierPath(rect: CGRect(center: bounds.center, size: CGSize(widthAndHeight: diameter)))
+            
+        case .RoundedSquare(let cornerRadius):
+            
+            let maxRadius = min(bounds.width, bounds.height) / 2
+            
+            return UIBezierPath(roundedRect: bounds, cornerRadius: min(cornerRadius, maxRadius))
+        }
+    }
+    
+    public func imageForSize(size: CGSize, color : UIColor = UIColor.blackColor()) -> UIImage
+    {
+        let bounds = CGRect(origin: CGPointZero, size: size)
+        
+        let path = pathForBounds(bounds)
+        
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        
+        defer { UIGraphicsEndImageContext() }
+        
+        color.setFill()
+        
+        path.fill()
+        
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+}
+
+public class BorderMaskLayer : CAShapeLayer
+{
+    public var type: BorderType = .Circle
+    
+    override public var frame : CGRect { didSet { updatePath() } }
+
+    func updatePath()
+    {
+        fillColor = CGColor.blackColor()
+        path = type.pathForBounds(frame).CGPath
+    }
+    
+    override public init()
+    {
+        super.init()
+    }
+    
+    public init(type: BorderType)
+    {
+        super.init()
+        self.type = type
+    }
+    
+    override public init(layer: AnyObject)
+    {
+        super.init(layer: layer)
+        
+        if let borderLayer = layer as? BorderMaskLayer
+        {
+            type = borderLayer.type
+        }
+    }
+    
+    required public init?(coder aDecoder: NSCoder)
+    {
+        super.init(coder: aDecoder)
+        updatePath()
+    }
+}
 
 public enum BorderWidth
 {
@@ -76,7 +175,6 @@ extension BorderWidth : CustomDebugStringConvertible
         }
     }
 }
-
 
 //MARK: - Equatable
 

@@ -69,18 +69,18 @@ class SetTests: XCTestCase {
         XCTAssertEqual(setABC.map{ if $0.dynamicType == A.self { return nil } ; return $0 }, setBC)
     }
 
-    func testFilter()
+    func testSift()
     {
         let setABC = Set<A>(A(), B(), A(), C(), nil, C())
         let setBC = Set<A>(B(), C(), B(), C(), B(), C(), B(), C(), B(), C(), nil, C())
 
-        let filteredForC = setABC.filter({$0 is C})
+        let filteredForC = setABC.sift({$0 is C})
         
         XCTAssert(filteredForC.dynamicType == Set<A>.self)
         
         XCTAssert(filteredForC.dynamicType == setABC.dynamicType)
         
-        XCTAssertEqual(filteredForC, setBC.filter({ $0 is C }))
+        XCTAssertEqual(filteredForC, setBC.sift({ $0 is C }))
         XCTAssertEqual(setBC.filter({ $0.hashValue == 1 }).count, 0)
     }
 

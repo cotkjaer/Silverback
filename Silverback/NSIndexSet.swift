@@ -12,7 +12,7 @@ import Foundation
 
 extension NSIndexSet
 {
-    convenience init<S:SequenceType where S.Generator.Element == Int>(indicies: S)
+    public convenience init<S:SequenceType where S.Generator.Element == Int>(indicies: S)
     {
         let mutable = NSMutableIndexSet()
         
@@ -21,7 +21,7 @@ extension NSIndexSet
         self.init(indexSet: mutable)
     }
     
-    var indicies : Set<Int>
+    public var indicies : Set<Int>
         {
             var set = Set<Int>()
         

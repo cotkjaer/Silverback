@@ -7,15 +7,16 @@
 //
 
 import Foundation
+import UIKit
 
 extension NSDate: Comparable, OptionalComparable, OptionalEquatable
 {
-    func lessThan(thing: Any?) -> Bool
+    public func lessThan(thing: Any?) -> Bool
     {
         return (self < thing as? NSDate) ?? false
     }
     
-    func equals(thing: Any?) -> Bool
+    public func equals(thing: Any?) -> Bool
     {
         return ( self == thing as? NSDate) ?? false
     }
@@ -69,5 +70,71 @@ public extension NSDate
         
         return (before, hours, minutes, seconds)
     }
-
 }
+
+//MARK: - components
+
+extension NSDate
+{
+    @warn_unused_result
+    public func component(unit: NSCalendarUnit, inCalendar calendar: NSCalendar = NSCalendar.currentCalendar()) -> Int
+    {
+        return calendar.component(unit, fromDate: self)
+    }
+}
+
+//MARK: - weekday
+
+extension NSDate
+{
+    @warn_unused_result
+    public func weekday(calendar: NSCalendar = NSCalendar.currentCalendar()) -> Int
+    {
+        return component(.Weekday, inCalendar:  calendar)
+    }
+}
+
+//MARK: - Seconds
+
+extension NSDate
+{
+    public var secondsSinceReferenceDate : Int
+    {
+        return Int(floor(timeIntervalSinceReferenceDate))
+    }
+}
+
+//MARK: - Bytes
+
+extension NSDate : BytesConvertible
+{
+    public func toBytes() -> [Byte]
+    {
+        return timeIntervalSinceReferenceDate.toBytes()
+    }
+    
+    public typealias FromBytesConvertibleType = NSDate
+    
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, NSDate)
+    {
+        let (o, timeIntervalSinceReferenceDate) = try Double.fromBytes(bytes, offset: offset)
+        
+        let date = NSDate(timeIntervalSinceReferenceDate: timeIntervalSinceReferenceDate)
+        
+        return (o, date)
+    }
+
+    public static func read(buffer: ByteBuffer) throws -> Self
+    {
+        return self.init(timeIntervalSinceReferenceDate: try buffer.read())
+    }
+}
+
+//MARK: - Image
+
+extension NSData
+{
+    public var asImage : UIImage? { return UIImage(data: self) }
+}
+
+

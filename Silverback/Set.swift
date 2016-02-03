@@ -159,7 +159,7 @@ extension Set where Element : ByteBufferable
             
             for _ in (0..<count)
             {
-                insert(try Element(buffer: buffer))
+                insert(try Element.read(buffer))
             }
         }
         catch let e

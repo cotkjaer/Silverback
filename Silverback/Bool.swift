@@ -10,67 +10,106 @@ import Foundation
 
 /// Randomly returns **either** `this` or `that`
 @warn_unused_result
-func either<T>(this: T, or that: T) -> T
+public func either<T>(this: T, or that: T) -> T
 {
     return Bool.random() ? this : that
 }
 
 /// Randomly returns one of the `T`s
 @warn_unused_result
-func random<T>(t: T, _ ts: T...) -> T
+public func random<T>(t: T, _ ts: T...) -> T
 {
     return (ts + [t]).random()!
 }
 
 /// Randomly executes **either** `this()` or `that()`
 @warn_unused_result
-func either<T>(@noescape this: () throws -> T, @noescape or that: () throws -> T) rethrows -> T
+public func either<T>(@noescape this: () throws -> T, @noescape or that: () throws -> T) rethrows -> T
 {
-    return try Bool.random() ? this() : that()
+    if Bool.random()
+    {
+        return try this()
+    }
+    else
+    {
+        return try that()
+    }
 }
 
 public extension Bool
 {
-    func toggled() -> Bool
+    public func toggled() -> Bool
     {
         return !self
     }
     
-    mutating func toggle() -> Bool
+    public mutating func toggle() -> Bool
     {
         self = !self
         return self
     }
     
-    static func random() -> Bool
+    public static func random() -> Bool
     {
         return UInt64.random() < UInt64.max / 2
     }
 
     /// Executes `this()` if self is **true**, `that()` if self is **false**
     /// - returns: The result of executing either closure-parameter
-    func onTrue<T>(@noescape this: () throws -> T, @noescape onFalse that: () throws -> T) rethrows -> T
+    public func onTrue<T>(@noescape this: () throws -> T, @noescape onFalse that: () throws -> T) rethrows -> T
     {
         return self ? try this() : try that()
     }
 
     /// Executes `this()` if self is **true**, `that()` if self is **false**
-    func onTrue<T>(@noescape this: () throws -> T) rethrows -> T?
+    public func onTrue<T>(@noescape this: () throws -> T) rethrows -> T?
     {
         return self ? try this() : nil
     }
-    
 }
 
 // MARK: - ByteConvertible
 
-extension Bool : ByteConvertible
+extension Bool : ByteConvertible//, ByteBufferable
 {
-    var byte : Byte { return self ? Byte.max : Byte.zero }
+//    public func write(buffer: ByteBuffer)
+//    {
+//        let byte = self ? Byte.max : Byte.zero
+//        
+//        byte.write(buffer)
+//    }
+//    
+//    public init(buffer: ByteBuffer) throws
+//    {
+//        let byte = try buffer.read()
+//        
+//        self = byte != Byte.zero// ? false : true
+//    }
+//
+//    public func toBytes() -> [Byte]
+//    {
+//        return [byte]
+//    }
     
-    init(byte: Byte)
+    public var byte : Byte { return self ? Byte.max : Byte.zero }
+
+    public init(byte: Byte)
     {
-        self = byte == Byte.zero ? false : true
+        self = byte != Byte.zero
+    }
+    
+    public typealias FromBytesConvertibleType = Bool
+    
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, Bool)
+    {
+        guard let byte = bytes.get(offset) else { throw BytesConvertibleError.InsufficientBytes(1, offset) }
+        
+        return (offset + 1, Bool(byte: byte))
+    }
+
+    public static func read(buffer: ByteBuffer) throws -> Bool
+    {
+        return Bool(byte:try buffer.read())
     }
 }
 

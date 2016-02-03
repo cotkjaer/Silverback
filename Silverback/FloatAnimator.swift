@@ -8,7 +8,7 @@
 
 public class FloatAnimator
 {
-    private let StepSize : Float = 0.02
+    private let StepSize : Float = 1.0/30.0
     
     private var tasks = Array<Task>()
     

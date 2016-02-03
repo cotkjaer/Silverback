@@ -38,8 +38,6 @@ public func min<S : SequenceType where S.Generator.Element:IntegerArithmeticType
     return min
 }
 
-
-
 public extension SequenceType
 {
     ///Return true iff **any** of the elements in self satisfies `predicate`
@@ -134,18 +132,18 @@ public extension SequenceType where Generator.Element: Hashable
     }
 }
 
-public extension SequenceType where Generator.Element == String
+extension SequenceType where Generator.Element == String
 {
     @warn_unused_result
-    func joinedWithSeparator(separator: String, prefix: String, suffix: String) -> String
+    public func joinedWithSeparator(separator: String, prefix: String, suffix: String) -> String
     {
         return map{ prefix + $0 + suffix }.joinWithSeparator(separator)
     }
 }
 
-public extension SequenceType where Generator.Element : CustomDebugStringConvertible
+extension SequenceType where Generator.Element : CustomDebugStringConvertible
 {
-    func debugDescription(separator: String, prefix: String, suffix: String = "") -> String
+    public func debugDescription(separator: String, prefix: String, suffix: String = "") -> String
     {
         return map{ prefix + $0.debugDescription + suffix }.joinWithSeparator(separator)
     }
@@ -157,5 +155,28 @@ public extension SequenceType where Generator.Element : CustomDebugStringConvert
     //    }
 }
 
+extension SequenceType where Generator.Element: Comparable
+{
+    public func span() -> (Generator.Element, Generator.Element)?
+    {
+        if let mi = minElement(), let ma = maxElement()
+        {
+            return (mi, ma)
+        }
+        
+        return nil
+    }
+}
 
+extension SequenceType where Generator.Element: Hashable
+{
+    public func frequencies() -> [(element: Generator.Element, frequency: Int)]
+    {
+        var frequency =  Dictionary<Generator.Element,Int>()
+        
+        forEach { frequency[$0] = (frequency[$0] ?? 0) + 1 }
+        
+        return frequency.map{($0.0, $0.1)}.sort{ $0.1 > $1.1 }
+    }
+}
 

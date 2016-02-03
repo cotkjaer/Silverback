@@ -8,6 +8,44 @@
 
 import UIKit
 
+// MARK: - Save
+
+extension UIImage
+{
+    public func savePNGToFile(fullFilePath: String)
+    {
+        UIImagePNGRepresentation(self)?.writeToFile(fullFilePath, atomically:false)
+    }
+    
+    
+    
+    private func save(optionalData: NSData?, basefilename: String, ext: String) -> Bool
+    {
+        if let data = optionalData,
+            let documentDirectoryURL = NSFileManager.documentsDirectoryURL()
+        {
+            let fileURL = documentDirectoryURL.URLByAppendingPathComponent(basefilename).URLByAppendingPathExtension(ext)
+            
+            debugPrint("Saving \(fileURL.path)")
+            
+            return data.writeToURL(fileURL, atomically: true)
+        }
+        
+        return false
+    }
+    
+    public func saveAsPNG(basefilename: String) -> Bool
+    {
+        return save(UIImagePNGRepresentation(self), basefilename: basefilename, ext: "png")
+    }
+    
+    public func saveAsJPG(basefilename: String, compressionQuality: CGFloat = 0.8) -> Bool
+    {
+        return save(UIImageJPEGRepresentation(self, compressionQuality), basefilename: basefilename, ext: "jpg")
+    }
+}
+
+
 //MARK: - Tint
 
 extension UIImage
@@ -65,16 +103,13 @@ extension UIImage
         // In next line, pass 0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
         // Pass 1 to force exact pixel size.
         UIGraphicsBeginImageContextWithOptions(scaledSize, false, 0)
+        defer { UIGraphicsEndImageContext() }
         
         let frame = CGRect(origin: CGPointZero, size: scaledSize)
         
         drawInRect(frame)
         
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        
-        UIGraphicsEndImageContext()
-        
-        return scaledImage
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
     
     private func compositeImage(path:UIBezierPath, usingBlendMode blend: CGBlendMode) -> UIImage
@@ -85,7 +120,8 @@ extension UIImage
         
         // Create Image context the size of the paths bounds
         UIGraphicsBeginImageContextWithOptions(pathBounds.size, false, scale)
-        
+        defer { UIGraphicsEndImageContext() }
+
         // First draw an opaque path...
         UIColor.blackColor().setFill()
         path.fill()
@@ -96,20 +132,15 @@ extension UIImage
         
         // With drawing complete, store the composited image for later use.
         
-        let maskedImage = UIGraphicsGetImageFromCurrentImageContext()
-        
-        // Graphics contexts must be ended manually.
-        UIGraphicsEndImageContext();
-        
-        return maskedImage
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
     
-    func imageByMaskingToAreaInsidePath(maskPath: UIBezierPath) -> UIImage
+    public func imageByMaskingToAreaInsidePath(maskPath: UIBezierPath) -> UIImage
     {
         return compositeImage(maskPath, usingBlendMode: CGBlendMode.SourceIn)
     }
     
-    func imageByMaskingToAreaOutsidePath(maskPath: UIBezierPath) -> UIImage
+    public func imageByMaskingToAreaOutsidePath(maskPath: UIBezierPath) -> UIImage
     {
         return compositeImage(maskPath, usingBlendMode: CGBlendMode.SourceOut)
     }

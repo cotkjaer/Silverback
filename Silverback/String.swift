@@ -9,6 +9,37 @@
 import Foundation
 import UIKit
 
+//MARK: - Lorem Ipsum
+
+extension String
+{
+    public init(loremIpsumLength: Int)
+    {
+        self = "Lorem ipsum dolor sit amet donec ut eros sapien. Tortor risus mauris. Viverra donec augue. Tortor rutrum vestibulum donec in dui. Ac consectetuer aliquet est rhoncus rutrum tellus risus curae consequat ut vestibulum sapien risus elit. Tortor eu donec. Morbi urna non ac imperdiet quisque. Etiam viverra lacinia. Faucibus in placerat. Mauris integer at a erat tempor. Aliquet sed id blandit cursus at vero sit amet venenatis mauris elit in interdum id. Auctor ullamcorper enim nulla curabitur quisque nunc quisque ac. Elit justo auctor. Vulputate scelerisque erat quis elit accumsan. Ac ipsum id. Lorem dolor tristique. Porttitor accumsan velit dui justo enim. Sapien maecenas sed. Proin ac nulla sem nisl nec sit fermentum justo at neque volutpat. Pulvinar tincidunt turpis. Ac nam venenatis. Tristique nulla sollicitudin adipiscing neque posuere vestibulum vitae purus. Mi viverra urna arcu purus metus. Ut neque praesent. Lectus morbi integer eros dignissim nec pharetra pulvinar quis."
+    }
+}
+
+//MARK: - replace
+
+extension String
+{
+    public mutating func replace(target: String, with optionalReplacement: String?)
+    {
+        self = self.with(target, replacedBy: optionalReplacement)
+    }
+    
+    @warn_unused_result
+    public func with(target: String, replacedBy optionalReplacement: String?) -> String
+    {
+        if let replacement = optionalReplacement
+        {
+            return self.stringByReplacingOccurrencesOfString(target, withString: replacement)
+        }
+        
+        return self
+    }
+}
+
 public extension String
 {
     init<T : UnsignedIntegerType>(_ v: T, radix: Int, uppercase: Bool = false, paddedToSize: Int)
@@ -34,7 +65,21 @@ public extension String
 {
     public var trimmed : String
         {
-            return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+            return stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+    }
+    
+    public func stringByTrimmingTail(forCharactersInSet: NSCharacterSet = NSCharacterSet.whitespaceAndNewlineCharacterSet()) -> String
+        {
+            let characterSet = NSCharacterSet.whitespaceAndNewlineCharacterSet()
+            
+            var characters = self.characters
+            
+            while characterSet.containsCharacter(characters.last)
+            {
+                characters.removeLast()
+            }
+            
+            return String(characters)
     }
 }
 
@@ -115,9 +160,78 @@ public extension String
 
 extension String : BytesConvertible
 {
-    var bytes : [Byte] { return Array<Byte>(utf8) }
+    public func toBytes() -> [Byte]
+    {
+        let bytes = Array<Byte>(utf8)
+        
+        let length = bytes.count
+        
+        if length <= Int(Byte.max)
+        {
+            return [Byte(1), Byte(length)] + bytes
+        }
+        else if length <= Int(UInt16.max)
+        {
+            return [Byte(2)] + UInt16(length).toBytes() + bytes
+        }
+        else if UInt(bitPattern: length) <= UInt(UInt32.max)
+        {
+            return [Byte(4)] + UInt32(length).toBytes() + bytes
+        }
+        else
+        {
+            return [Byte(8)] + UInt64(length).toBytes() + bytes
+        }
+    }
     
-    init(bytes: [Byte]) throws
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, String)
+    {
+        var (off, bytesContainingLength) = try Byte.fromBytes(bytes, offset: offset)
+        
+        var stringLength  = 0
+        
+        switch bytesContainingLength
+        {
+        case 1:
+            let (o, byteContainingStringLength) = try Byte.fromBytes(bytes, offset: off)
+            stringLength = Int(byteContainingStringLength)
+            off = o
+            
+        case 2:
+            let (o, uint16ContainingStringLength) = try UInt16.fromBytes(bytes, offset: off)
+            stringLength = Int(uint16ContainingStringLength)
+            off = o
+            
+        case 4:
+            let (o, uint32ContainingStringLength) = try UInt32.fromBytes(bytes, offset: off)
+            stringLength = Int(uint32ContainingStringLength)
+            off = o
+            
+        case 8:
+            let (o, uint64ContainingStringLength) = try UInt64.fromBytes(bytes, offset: off)
+            stringLength = Int(uint64ContainingStringLength)
+            off = o
+        
+        default:
+            throw BytesConvertibleError.MalformedBytes([bytes[offset]])
+        }
+
+        guard off + stringLength < bytes.count else { throw BytesConvertibleError.InsufficientBytes(off, stringLength) }
+        
+        let stringUtf8Bytes = Array(bytes[off..<off+stringLength])
+        
+        if let string = String(bytes: stringUtf8Bytes, encoding: NSUTF8StringEncoding)
+        {
+            return (off + stringLength, string)
+        }
+        else
+        {
+            throw BytesConvertibleError.MalformedBytes(stringUtf8Bytes)
+        }
+    }
+    
+    
+    public init(bytes: [Byte]) throws
     {
         if let string = String(bytes: bytes, encoding: NSUTF8StringEncoding)
         {
@@ -134,15 +248,22 @@ extension String : BytesConvertible
 
 extension String : ByteBufferable
 {
-    init(buffer: ByteBuffer) throws
+    public init(buffer: ByteBuffer) throws
     {
         let bytes = try buffer.read(2, dynamic: true)
         
         try self.init(bytes:bytes)
     }
     
-    func write(buffer: ByteBuffer)
+    public static func read(buffer: ByteBuffer) throws -> String
     {
-        buffer.write(self.bytes, optionalPrefixCount: 2)
+        return try String(buffer: buffer)
+    }
+    
+    public func write(buffer: ByteBuffer)
+    {
+        let bytes = Array<Byte>(utf8)
+
+        buffer.write(bytes, optionalPrefixCount: 2)
     }
 }

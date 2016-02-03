@@ -13,9 +13,6 @@ public class CircleView: UIView
 {
     public var borderWidth = BorderWidth.Normal { didSet { updateBorder() } }
     
-    @IBInspectable
-    public var borderColor :  UIColor? { didSet { updateLayerBorderColor() } }
-    
     override public var bounds: CGRect { didSet { updateLayerCornerRadius() } }
     
     private func setup()
@@ -44,6 +41,7 @@ public class CircleView: UIView
     
     private func updateLayerCornerRadius()
     {
+        roundCorners()
         let radius = min(bounds.size.width, bounds.size.height) / 2
         
         layer.cornerRadius = radius
@@ -54,10 +52,42 @@ public class CircleView: UIView
     {
         layer.borderColor = (borderColor ?? tintColor).CGColor
     }
-
+    
     func updateBorder()
     {
         updateLayerBorderColor()
         updateLayerCornerRadius()
+    }
+}
+
+public class SuperEllipseView : UIView
+{
+    // MARK: - Init
+    
+    override public init(frame: CGRect)
+    {
+        super.init(frame: frame)
+        setup()
+    }
+    
+    required public init?(coder aDecoder: NSCoder)
+    {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    func setup()
+    {
+        let mask = BorderMaskLayer(type: .SuperEllipse)
+        mask.frame = bounds
+        
+        layer.mask = mask
+    }
+    
+    override public var bounds: CGRect { didSet { updateMask() } }
+    
+    func updateMask()
+    {
+        layer.mask?.frame = bounds
     }
 }

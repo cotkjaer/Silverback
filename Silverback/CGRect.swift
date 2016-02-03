@@ -86,20 +86,20 @@ public extension CGRect
     
     // MARK: CGRectGet...
     
-    var minX : CGFloat { get { return CGRectGetMinX(self) } }
-    var midX : CGFloat { get { return CGRectGetMidX(self) } }
-    var maxX : CGFloat { get { return CGRectGetMaxX(self) } }
-    
-    var minY : CGFloat { get { return CGRectGetMinY(self) } }
-    var midY : CGFloat { get { return CGRectGetMidY(self) } }
-    var maxY : CGFloat { get { return CGRectGetMaxY(self) } }
+//    var minX : CGFloat { get { return CGRectGetMinX(self) } }
+//    var midX : CGFloat { get { return CGRectGetMidX(self) } }
+//    var maxX : CGFloat { get { return CGRectGetMaxX(self) } }
+//    
+//    var minY : CGFloat { get { return CGRectGetMinY(self) } }
+//    var midY : CGFloat { get { return CGRectGetMidY(self) } }
+//    var maxY : CGFloat { get { return CGRectGetMaxY(self) } }
     
     // MARK: Contains
     
-    func contains(point: CGPoint) -> Bool
-    {
-        return CGRectContainsPoint(self, point)
-    }
+//    func contains(point: CGPoint) -> Bool
+//    {
+//        return CGRectContainsPoint(self, point)
+//    }
     
     func contains(rect: CGRect) -> Bool
     {
@@ -172,6 +172,11 @@ public extension CGRect
     
     // MARK: inset
     
+    mutating func inset(edgeInset: UIEdgeInsets)
+    {
+        inset(top: edgeInset.top, left: edgeInset.left, bottom: edgeInset.bottom, right: edgeInset.right)
+    }
+    
     mutating func inset(by: CGFloat)
     {
         insetInPlace(dx: by, dy: by)
@@ -187,7 +192,7 @@ public extension CGRect
         insetInPlace(dx: 0, dy: dy)
     }
     
-    mutating func inset(top: CGFloat = 0, left: CGFloat = 0, bottom: CGFloat = 0, right: CGFloat = 0)
+    mutating func inset(top top: CGFloat = 0, left: CGFloat = 0, bottom: CGFloat = 0, right: CGFloat = 0)
     {
         x = x + left
         y = y + top
@@ -197,12 +202,12 @@ public extension CGRect
     
     mutating func inset(topLeft topLeft: CGSize)
     {
-        inset(topLeft.height, left: topLeft.width, bottom: 0, right: 0)
+        inset(top: topLeft.height, left: topLeft.width, bottom: 0, right: 0)
     }
     
     mutating func inset(topRight topRight: CGSize)
     {
-        inset(topRight.height, right: topRight.width, bottom: 0, left: 0)
+        inset(top: topRight.height, right: topRight.width, bottom: 0, left: 0)
     }
     
     mutating func inset(bottomLeft bottomLeft: CGSize)
@@ -266,6 +271,24 @@ public extension CGRect
         get { return CGPoint(x: right, y: bottom) }
         set { right = newValue.x; bottom = newValue.y }
     }
+}
+
+//MARK: - Convert
+import UIKit
+extension CGRect
+{
+    public func convert(fromView fromView: UIView? = nil, toView: UIView) -> CGRect
+    {
+        return toView.convertRect(self, fromView: fromView)
+    }
+}
+
+//MARK: - Width and Height
+
+extension CGRect
+{
+    public var minWidthHeight : CGFloat { return size.minWidthHeight }
+    public var maxWidthHeight : CGFloat { return size.maxWidthHeight }
 }
 
 // MARK: - Relative position

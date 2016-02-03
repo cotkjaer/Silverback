@@ -13,11 +13,39 @@ import UIKit
 
 extension CGPoint
 {
-//    public init(_ x: CGFloat, _ y: CGFloat)
-//    {
-//        self.x = x
-//        self.y = y
-//    }
+    // MARK: init
+    
+    public init(x: CGFloat)
+    {
+        self.init(x:x, y:0)
+    }
+    
+    public init(y: CGFloat)
+    {
+        self.init(x:0, y:y)
+    }
+
+    public init(size: CGSize)
+    {
+        self.init(x:size.width, y:size.height)
+    }
+
+    // MARK: clamp
+    
+    func clampedTo(rect: CGRect) -> CGPoint
+    {
+        return CGPoint(
+            x: clamp(x, minimum: rect.minX, maximum: rect.maxX),
+            y: clamp(y, minimum: rect.minY, maximum: rect.maxY)
+        )
+    }
+    
+    // MARK: map
+    
+    func map(transform: CGFloat -> CGFloat) -> CGPoint
+    {
+        return CGPoint(x: transform(x), y: transform(y))
+    }
     
     // MARK: with
     
@@ -53,7 +81,7 @@ extension CGPoint
     // MARK: rotation
     
     /// angle is in radians
-    public mutating func rotate(theta:CGFloat, around center:CGPoint)
+    public mutating func rotate(theta:CGFloat, around center:CGPoint = CGPointZero)
     {
         let sinTheta = sin(theta)
         let cosTheta = cos(theta)
@@ -64,6 +92,21 @@ extension CGPoint
         x = center.x + (transposedX * cosTheta - transposedY * sinTheta)
         y = center.y + (transposedX * sinTheta + transposedY * cosTheta)
     }
+
+    /// angle is in radians
+    public func rotated(theta:CGFloat, around center:CGPoint) -> CGPoint
+    {
+        return (self - center).rotated(theta) + center
+    }
+    
+    /// angle is in radians
+    public func rotated(theta:CGFloat) -> CGPoint
+    {
+        let sinTheta = sin(theta)
+        let cosTheta = cos(theta)
+        
+        return CGPoint(x: x * cosTheta - y * sinTheta, y: x * sinTheta + y * cosTheta)
+    }
     
     public func angleToPoint(point: CGPoint) -> CGFloat
     {
@@ -71,92 +114,33 @@ extension CGPoint
     }
 }
 
-public func dot(a: CGPoint, _ b: CGPoint) -> CGFloat
+//MARK: - Convert
+import UIKit
+extension CGPoint
 {
-    return a.x * b.x + a.y * b.y
-}
-
-public func distance(a: CGPoint, _ b: CGPoint) -> CGFloat
-{
-    return a.distanceTo(b)
-}
-
-public func distanceSquared(a: CGPoint, _ b: CGPoint) -> CGFloat
-{
-    return pow(a.x - b.x, 2) + pow(a.y - b.y, 2)
-}
-
-/**
-Distance between a line-segment and a point
-- parameter lineSegment: line-segment
-- parameter point: point
-- returns: Minimum distance between a line-segment and a point
-*/
-public func distance(lineSegment:(CGPoint, CGPoint), _ point: CGPoint) -> CGFloat
-{
-    let v = lineSegment.0
-    let w = lineSegment.1
-    let p = point
-    
-    if v == w { return distance(v, p) }
-    
-    // Return minimum distance between line segment vw and point p
-    
-    let l = distanceSquared(v, w)
-    
-    // Consider the line extending the segment, parameterized as v + t (w - v).
-    // We find projection of point p onto the line.
-    // It falls where t = [(p-v) . (w-v)] / |w-v|^2
-    let t = dot(p - v, w - v) / l
-    
-    if t < 0 // Beyond the 'v' end of the segment
+    public func convert(fromView fromView: UIView? = nil, toView: UIView) -> CGPoint
     {
-        return distance(p, v)
-    }
-    else if t > 1 // Beyond the 'w' end of the segment
-    {
-        return distance(p, w)
-    }
-    else // Projection falls on the segment
-    {
-        let projection = (1-t) * v + t * w// v + t * (w - v)
-        return distance(p, projection)
+        return toView.convertPoint(self, fromView: fromView)
     }
 }
 
 /**
-Precise linear interpolation function which guarantees *lerp(a,b,0) == a && lerp(a,b,1) == b*
-
-- parameter a: begin point
-- parameter b: end point
-- parameter t: 'time' traveled from *a* to *b*, **must** be in the closed unit interval [0,1], defaults to 0.5
-- returns: An interpolation between points *a* and *b* for the 'time' parameter *t*
-*/
-public func lerp(a: CGPoint, _ b: CGPoint, _ t: CGFloat = 0.5) -> CGPoint
-{
-    // Should be return (1-t) * a + t * b
-    // but this is more effective as it creates only one new CGPoint and performs minimum number of arithmetic operations
-    return CGPoint(x: (1-t) * a.x + t * b.x, y: (1-t) * a.y + t * b.y)
-}
-
-/**
-Linear interpolation for array of points, usefull for calculating Bézier curve points using DeCasteljau subdivision algorithm
-
-- parameter ps: the points
-- parameter t: 'time' traveled from *ps[i]* to *ps[i+1]*, **must** be in the closed unit interval [0,1], defaults to 0.5
-- returns: If *ps.count < 2 ps* itself will be returned. Else an interpolation between all neighbouring points in *ps* for the 'time' parameter *t* (the resulting Array will be one shorter than  *ps*)
-*/
-public func lerp(ps: [CGPoint], t: CGFloat) -> [CGPoint]
-{
-    let count = ps.count
-    
-    if count < 2
-    {
-        return ps
-    }
-    
-    return Array(1..<count).map( { lerp(ps[$0-1], ps[$0], t) } )
-}
+ Linear interpolation for array of points, usefull for calculating Bézier curve points using DeCasteljau subdivision algorithm
+ 
+ - parameter points: the points
+ - parameter t: 'time' traveled from `points[i]` to `ppints[i+1]`, **must** be in the closed unit interval [0,1], defaults to 0.5
+ - returns: If `points.count < 2` `points` itself will be returned. Else an interpolation between all neighbouring points in `points` for the 'time' parameter `t` (the resulting Array will be one shorter than the original `points`)
+ */
+//public func lerp(points: [CGPoint], t: CGFloat) -> [CGPoint]
+//{
+//    let count = points.count
+//    
+//    guard count > 1 else { return points }
+//    
+//    return 1.stride(to: count, by: 1).map { i in lerp(points[i - 1], points[i], t) }
+//    
+//    //    return Array(1..<count).map { lerp(points[$0-1], points[$0], t) }
+//}
 
 
 public func rotate(point p1:CGPoint, radians: CGFloat, around p2:CGPoint) -> CGPoint
@@ -249,6 +233,11 @@ public func - (p1: CGPoint, p2: CGPoint) -> CGPoint
     return CGPoint(x: p1.x - p2.x, y: p1.y - p2.y)
 }
 
+public func - (p1: CGPoint, p2: CGPoint?) -> CGPoint
+{
+    return p1 - (p2 ?? CGPointZero)
+}
+
 public func -= (inout p1: CGPoint, p2: CGPoint)
 {
     p1.x -= p2.x
@@ -265,6 +254,31 @@ public func += (inout point: CGPoint, size: CGSize)
     point.x += size.width
     point.y += size.height
 }
+
+
+public func + (point: CGPoint, vector: CGVector) -> CGPoint
+{
+    return CGPoint(x: point.x + vector.dx, y: point.y + vector.dy)
+}
+
+public func += (inout point: CGPoint, vector: CGVector)
+{
+    point.x += vector.dx
+    point.y += vector.dy
+}
+
+public func - (point: CGPoint, vector: CGVector) -> CGPoint
+{
+    return CGPoint(x: point.x - vector.dx, y: point.y - vector.dy)
+}
+
+public func -= (inout point: CGPoint, vector: CGVector)
+{
+    point.x -= vector.dx
+    point.y -= vector.dy
+}
+
+
 
 public func - (point: CGPoint, size: CGSize) -> CGPoint
 {
@@ -364,5 +378,166 @@ public extension CGPoint
     
 }
 
+//MARK: - Round
 
+public func round(point: CGPoint, toDecimals: Int = 0) -> CGPoint
+{
+    let decimals = max(0, toDecimals)
+    
+    if decimals == 0
+    {
+        return CGPoint(x: round(point.x), y: round(point.y))
+    }
+    else
+    {
+        let factor = pow(10, CGFloat(max(decimals, 0)))
+        
+        return CGPoint(x: round(point.x * factor) / factor, y: round(point.y * factor) / factor)
+    }
+}
+
+// MARK: - Tuples
+
+public extension CGPoint
+{
+    init(_ tuple: (CGFloat, CGFloat))
+    {
+        (x, y) = tuple
+    }
+    
+    var tuple: (CGFloat, CGFloat) { return (x, y) }
+}
+
+//MARK: - Zero
+
+extension CGPoint
+{
+    static let zero = CGPointZero
+    
+    func isZero() -> Bool { return x == 0 && y == 0 }
+}
+
+// MARK: - Trigonometry
+
+public func dotProduct(a: CGPoint, _ b: CGPoint) -> CGFloat {
+    return a.x * b.x + a.y * b.y
+}
+
+public func dot(a: CGPoint, _ b: CGPoint) -> CGFloat
+{
+    return a.x * b.x + a.y * b.y
+}
+
+public func · (lhs: CGPoint, _ rhs: CGPoint) -> CGFloat {
+    return lhs.x * rhs.x + lhs.y * rhs.y
+}
+
+public func distance(a: CGPoint, _ b: CGPoint) -> CGFloat
+{
+    return a.distanceTo(b)
+}
+
+public func distanceSquared(a: CGPoint, _ b: CGPoint) -> CGFloat
+{
+    return pow(a.x - b.x, 2) + pow(a.y - b.y, 2)
+}
+
+
+public func x(lhs: CGPoint, _ rhs: CGPoint) -> CGFloat
+{
+    return lhs.x * rhs.y - lhs.y * rhs.x
+}
+
+public func cross(lhs: CGPoint, _ rhs: CGPoint) -> CGFloat
+{
+    return lhs.x * rhs.y - lhs.y * rhs.x
+}
+
+public func crossProduct(lhs: CGPoint, _ rhs: CGPoint) -> CGFloat
+{
+    return lhs.x * rhs.y - lhs.y * rhs.x
+}
+
+public extension CGPoint
+{
+    init(magnitude: CGFloat, direction: CGFloat) {
+        x = cos(direction) * magnitude
+        y = sin(direction) * magnitude
+    }
+    
+    var magnitude: CGFloat {
+        get {
+            return sqrt(x * x + y * y)
+        }
+        set(v) {
+            self = CGPoint(magnitude: v, direction: direction)
+        }
+    }
+    
+    var magnitudeSquared: CGFloat {
+        return x * x + y * y
+    }
+    
+    var direction: CGFloat {
+        get {
+            return atan2(self)
+        }
+        set(v) {
+            self = CGPoint(magnitude: magnitude, direction: v)
+        }
+    }
+    
+    var normalized: CGPoint {
+        let len = magnitude
+        return len ==% 0 ? self : CGPoint(x: x / len, y: y / len)
+    }
+    
+    var orthogonal: CGPoint {
+        return CGPoint(x: -y, y: x)
+    }
+    
+    var transposed: CGPoint {
+        return CGPoint(x: y, y: x)
+    }
+    
+}
+
+public func atan2(point: CGPoint) -> CGFloat {   // (-M_PI, M_PI]
+    return atan2(point.y, point.x)
+}
+
+// MARK: - Translate
+
+extension CGPoint
+{
+    public mutating func translate(dx: CGFloat? = nil, dy: CGFloat? = nil)
+    {
+        if let delta = dx
+        {
+            x += delta
+        }
+        
+        if let delta = dy
+        {
+            y += delta
+        }
+    }
+    
+    public func translated(dx: CGFloat? = nil, dy: CGFloat? = nil) -> CGPoint
+    {
+        var p = CGPoint(x: x, y: y)
+        
+        if let delta = dx
+        {
+            p.x += delta
+        }
+        
+        if let delta = dy
+        {
+            p.y += delta
+        }
+        
+        return p
+    }
+}
 

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 enum EasingCurve
 {
@@ -273,7 +274,8 @@ public func BackEaseIn(p: CGFloat) -> CGFloat
 public func BackEaseOut(p: CGFloat) -> CGFloat
 {
     let f = (1 - p)
-    return 1 - (f * f * f - f * sin(f * π))
+    let f3 = f * f * f
+    return 1 - (f3 - f * sin(f * π))
 }
 
 // Modeled after the piecewise overshooting cubic function:

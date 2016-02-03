@@ -6,75 +6,21 @@
 //  Copyright © 2015 Christian Otkjær. All rights reserved.
 //
 
-typealias Byte = UInt8
-
-enum BytesConvertibleError : ErrorType
+public protocol ByteBufferable
 {
-    case InsufficientBytes(Int, Int)
-    case MalformedBytes([Byte])
-}
-
-protocol ByteConvertible : ByteBufferable//, BytesConvertible
-{
-    init(byte: Byte)
-    
-    var byte: Byte { get }
-}
-
-//MARK: - Default implementation
-
-extension ByteConvertible
-{
-    // MARK: - BytesConvertible
-    
-    init(bytes: [Byte]) throws {
-        switch bytes.count
-        {
-        case 0:
-            throw BytesConvertibleError.InsufficientBytes(1, 0)
-        case 1:
-            self.init(byte: bytes[0])
-        default:
-            throw BytesConvertibleError.MalformedBytes(bytes)
-        }
-    }
-    
-    var bytes : [Byte] { return [byte] }
-    
-    // MARK: - ByteBufferable
-    
-    init(buffer: ByteBuffer) throws
-    {
-        self.init(byte: try buffer.read())
-    }
-    
-    func write(buffer: ByteBuffer)
-    {
-        buffer.write(byte)
-    }
-}
-
-protocol BytesConvertible
-{
-    var bytes: [Byte] { get }
-    
-    init(bytes: [Byte]) throws
-}
-
-protocol ByteBufferable
-{
-    init(buffer: ByteBuffer) throws
+    static func read(buffer: ByteBuffer) throws -> Self
+//    init(buffer: ByteBuffer) throws
     
     func write(buffer: ByteBuffer)
 }
 
-class ByteBuffer
+public class ByteBuffer
 {
     private var buffer = Buffer<Byte>()
     
     // MARK: - Write
     
-    func write(bytes:[Byte], optionalPrefixCount: Int? = nil)
+    public func write(bytes:[Byte], optionalPrefixCount: Int? = nil)
     {
         if let count = optionalPrefixCount
         {
@@ -88,37 +34,80 @@ class ByteBuffer
         buffer.write(bytes)
     }
     
-    func write(byte: Byte)
+    public func write(byte: Byte)
     {
         buffer.write(byte)
     }
     
-    func write<B:ByteBufferable>(bytable: B)
+    public func write<B:ByteBufferable>(bufferable: B)
     {
-        bytable.write(self)
+        bufferable.write(self)
     }
     
-    func writeOptional<B:ByteBufferable>(optionalByteBufferable: B?)
+    public func writeOptional<B:ByteBufferable>(optionalByteBufferable: B?)
     {
         write(optionalByteBufferable != nil)
         
-        if let bytable = optionalByteBufferable
+        if let bufferable = optionalByteBufferable
         {
-            write(bytable)
+            write(bufferable)
         }
     }
     
-    func write<S:SequenceType where S.Generator.Element : ByteBufferable>(bytables: S)
+    public func write<S:SequenceType where S.Generator.Element : ByteBufferable>(bufferables: S)
     {
-        let array = Array(bytables)
+        let array = Array(bufferables)
         
         write(array.count)
         array.forEach{ write($0) }
     }
     
+//    // MARK: ToBytesConvertible
+//
+//    public func write<B:ToBytesConvertible>(bytesConvertible: B)
+//    {
+//        write(bytesConvertible.toBytes())
+//    }
+//    
+//    public func writeOptional<B:ToBytesConvertible>(optionalBytesConvertible: B?)
+//    {
+//        write(optionalBytesConvertible != nil)
+//        
+//        if let bytes = optionalBytesConvertible?.toBytes()
+//        {
+//            write(bytes)
+//        }
+//    }
+//    
+//    public func write<S:SequenceType where S.Generator.Element : ToBytesConvertible>(bytesConvertibles: S)
+//    {
+//        let array = Array(bytesConvertibles)
+//        
+//        write(array.count)
+//        array.forEach{ write($0) }
+//    }
+    
+//    // MARK: - Functions
+//    
+//    public func write(function: (()->[Byte]))
+//    {
+//        write(function())
+//    }
+
+//    
+//    public func writeOptional(string: String?)
+//    {
+//        write(string != nil)
+//        
+//        if let bytes = string?.toBytes()
+//        {
+//            write(bytes)
+//        }
+//    }
+
     // MARK: - Read
     
-    func read(count: Int, dynamic : Bool = false) throws -> [Byte]
+    public func read(count: Int, dynamic : Bool = false) throws -> [Byte]
     {
         if dynamic
         {
@@ -134,22 +123,24 @@ class ByteBuffer
         return try buffer.read(count)
     }
     
-    func read<B:ByteBufferable>(type: B.Type) throws -> B
+    public func read<B:ByteBufferable>(type: B.Type) throws -> B
     {
-        return try B(buffer: self)
+        return try B.read(self) //B(buffer: self)
     }
     
-    func read() throws -> Byte
+    public func read() throws -> Byte
     {
         return try buffer.read()
     }
+
+    // MARK: - ByteBufferable
     
-    func read<B:ByteBufferable>() throws -> B
+    public func read<B:ByteBufferable>() throws -> B
     {
-        return try B(buffer: self)
+        return try B.read(self) //B(buffer: self)
     }
     
-    func readOptional<B:ByteBufferable>() throws -> B?
+    public func readOptional<B:ByteBufferable>() throws -> B?
     {
         if try read() as Bool
         {
@@ -159,24 +150,26 @@ class ByteBuffer
         return nil
     }
     
-    func read<B:ByteBufferable where B:Hashable>() throws -> Set<B>
+    public func read<B:ByteBufferable where B:Hashable>() throws -> Set<B>
     {
         return Set(try 0.stride(to: try read() as Int, by: 1).map{ _ in try read() as B })
     }
     
-    func read<B:ByteBufferable>() throws -> [B]
+    public func read<B:ByteBufferable>() throws -> [B]
     {
         return try 0.stride(to: try read() as Int, by: 1).map{ _ in try read() as B }
     }
+
+    // MARK: - Available
     
-    var available : Int { return buffer.available }
+    public var available : Int { return buffer.available }
 }
 
 // MARK: - CustomDebugStringConvertible
 
 extension ByteBuffer : CustomDebugStringConvertible
 {
-    var debugDescription : String {
+    public var debugDescription : String {
         
         return "\(buffer.available) : " + buffer.elements.map{ String($0, radix: 16, uppercase: true, paddedToSize: 2) }.joinWithSeparator(" ")
     }

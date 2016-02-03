@@ -8,10 +8,11 @@
 
 import UIKit
 
-class CircleCell: UICollectionViewCell
+@IBDesignable
+public class CircleCell: UICollectionViewCell
 {
-    let backgroundCircleView = CircleView()
-    let selectedBackgroundCircleView = CircleView()
+    public let backgroundCircleView = CircleView()
+    public let selectedBackgroundCircleView = CircleView()
     
     private func setup()
     {
@@ -22,13 +23,13 @@ class CircleCell: UICollectionViewCell
         selectedBackgroundView = selectedBackgroundCircleView
     }
     
-    override init(frame: CGRect)
+    public override init(frame: CGRect)
     {
         super.init(frame: frame)
         setup()
     }
     
-    required init?(coder aDecoder: NSCoder)
+    public required init?(coder aDecoder: NSCoder)
     {
         super.init(coder: aDecoder)
         setup()
@@ -40,7 +41,7 @@ class CircleCell: UICollectionViewCell
         selectedBackgroundCircleView.updateBorder()
     }
     
-    override var bounds: CGRect { didSet { updateBackgrounds() } }
+    public override var bounds: CGRect { didSet { updateBackgrounds() } }
 }
 
 

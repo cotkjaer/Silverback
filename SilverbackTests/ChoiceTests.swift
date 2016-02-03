@@ -15,7 +15,7 @@ class ChoiceTests: XCTestCase
         XCTAssertNotNil(GenericChoice<Int>())
         XCTAssertNotNil(GenericChoice<String>())
         XCTAssertNotNil(GenericChoice<Bool>())
-        XCTAssertNotNil(GenericChoice<UInt8>())
+        XCTAssertNotNil(GenericChoice<Byte>())
     }
     
     func testChoose()

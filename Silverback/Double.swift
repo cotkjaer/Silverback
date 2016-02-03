@@ -89,3 +89,52 @@ extension Double
     }
 }
 
+
+//MARK: - Bytes
+
+extension Double : BytesInitializable//Convertible
+{
+    typealias FormBytesConvertibleType = Double
+    
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, Double)
+    {
+        let length = sizeofValue(Double)
+        
+        guard bytes.count >= offset + length else { throw BytesConvertibleError.InsufficientBytes(offset, length) }
+        
+        var pointer = UnsafePointer<Byte>(bytes)
+        pointer = pointer.advancedBy(offset)
+        
+        let doublePointer =  UnsafePointer<Double>(pointer)
+
+        return (offset + length, doublePointer.memory)
+    }
+    
+    public func toBytes() -> [Byte]
+    {
+        let length = sizeofValue(Double)
+        
+        let bytes = Array<Byte>(count: length, repeatedValue: 0)
+        let bPointer = UnsafeMutablePointer<Byte>(bytes)
+        
+        var this = self
+        
+        memcpy(bPointer, &this, length)
+        
+        return bytes
+    }
+    
+    public init(bytes: [Byte]) throws
+    {
+        (_ , self) = try Double.fromBytes(bytes, offset: 0)
+    }
+    
+    public init(buffer: ByteBuffer) throws
+    {
+//        let length = sizeofValue(Double)
+//
+//        let bytes = try buffer.read(length)
+//        
+        try self.init(bytes: try buffer.read(sizeof(Double)))
+    }
+}

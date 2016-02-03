@@ -8,6 +8,18 @@
 
 import Foundation
 
+// MARK: - String
+
+extension NSRange
+{
+    public func rangeInString(string: String) -> Range<String.Index>
+    {
+        let startIndex = string.startIndex.advancedBy(location)
+        let endIndex = startIndex.advancedBy(length)
+        return startIndex..<endIndex
+    }
+}
+
 extension NSRange
 {
     public init(location: Int, length: Int)
@@ -16,19 +28,7 @@ extension NSRange
         self.length = length
     }
     
-    public init(_ location: Int, _ length: Int)
-    {
-        self.location = location
-        self.length = length
-    }
-    
     public init(range: Range<Int>)
-    {
-        location = range.startIndex
-        length = range.endIndex - range.startIndex
-    }
-    
-    public init(_ range: Range<Int>)
     {
         location = range.startIndex
         length = range.endIndex - range.startIndex

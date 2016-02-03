@@ -304,21 +304,21 @@ extension Byte : ByteConvertible
 {
     static var zero : Byte { return Byte(0) }
     
-    var byte : Byte { return self }
+    public var byte : Byte { return self }
     
-    init(byte: Byte)
+    public init(byte: Byte)
     {
         self.init(byte)
     }
     
-    // MARK: - ByteBufferable
+    // MARK: - ByteBufferpublic able
     
-    init(buffer: ByteBuffer) throws
+    public init(buffer: ByteBuffer) throws
     {
         self = try buffer.read()
     }
     
-    func write(buffer: ByteBuffer)
+    public func write(buffer: ByteBuffer)
     {
         buffer.write(self)
     }
@@ -326,79 +326,114 @@ extension Byte : ByteConvertible
 
 extension Int8 : ByteConvertible
 {
-    var byte : Byte { return Byte(bitPattern: self) }
+    public var byte : Byte { return Byte(bitPattern: self) }
     
-    init(byte: Byte)
+    public init(byte: Byte)
     {
         self.init(bitPattern: byte)
     }
+    
+    public typealias FromBytesConvertibleType = Int8
+
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, FromBytesConvertibleType)
+    {
+        let b = bytes[offset]
+        
+        return (offset + 1, Int8(bitPattern: b))
+    }
+
+    public static func read(buffer: ByteBuffer) throws -> Int8
+    {
+        return self.init(byte: try buffer.read())
+    }
 }
+
+
 
 extension UInt16 : ByteBufferable
 {
-    var bytes : [Byte] {
-        
-        let mask = UInt16(0xff)
-        
-        return [1, 0].map{ Byte( (self >> (8 * $0)) & mask ) }
-    }
-    
-    init(bytes: [Byte]) throws
+//    var bytes : [Byte] {
+//        
+//        let mask = UInt16(0xff)
+//        
+//        return [1, 0].map{ Byte( (self >> (8 * $0)) & mask ) }
+//    }
+//    
+    public init(bytes: [Byte]) throws
     {
         switch bytes.count
         {
         case 0,1:
             throw BytesConvertibleError.InsufficientBytes(sizeof(Byte), 0)
             
-        case 2:
-            self = bytes.reduce(UInt16(0)) { ($0 << 8) + UInt16($1) }
+        case sizeof(UInt16):
             
+            var value : UInt16 = 0
+            
+            for byte in bytes
+            {
+                value = value << 8
+                value += UInt16(byte)
+            }
+            
+            self.init(value)
+
         default:
             throw BytesConvertibleError.MalformedBytes(bytes)
         }
     }
     
-    init(buffer: ByteBuffer) throws
+    public init(buffer: ByteBuffer) throws
     {
         try self.init(bytes: try buffer.read(sizeof(UInt16)))
     }
     
-    func write(buffer: ByteBuffer)
+    public func write(buffer: ByteBuffer)
     {
-        buffer.write(self.bytes)
+        buffer.write(self.toBytes())
+    }
+    
+    
+    public static func read(buffer: ByteBuffer) throws -> UInt16
+    {
+        return try UInt16(buffer: buffer)
     }
 }
 
 extension Int16 : ByteBufferable
 {
-    var bytes : [Byte] { return UInt16(bitPattern: self).bytes }
     
-    init(bytes: [Byte]) throws
+    public init(bytes: [Byte]) throws
     {
         self.init(bitPattern: try UInt16(bytes: bytes))
     }
     
-    init(buffer: ByteBuffer) throws
+    public init(buffer: ByteBuffer) throws
     {
         try self.init(bytes: try buffer.read(sizeof(Int16)))
     }
-    
-    func write(buffer: ByteBuffer)
+
+    public static func read(buffer: ByteBuffer) throws -> Int16
     {
-        buffer.write(self.bytes)
+        return try Int16(buffer: buffer)
+    }
+
+    public func write(buffer: ByteBuffer)
+    {
+        buffer.write(self.toBytes())
     }
 }
 
 extension UInt32 : ByteBufferable
 {
-    var bytes : [Byte] {
+    public var bytes : [Byte] {
         
         let mask = UInt32(0xff)
         
         return [3, 2, 1, 0].map{ Byte( (self >> (8 * $0)) & mask ) }
         }
     
-    init(bytes: [Byte]) throws
+    public init(bytes: [Byte]) throws
     {
         switch bytes.count
         {
@@ -420,32 +455,42 @@ extension UInt32 : ByteBufferable
         }
     }
     
-    init(buffer: ByteBuffer) throws { try self.init(bytes: try buffer.read(sizeof(UInt32))) }
+    public init(buffer: ByteBuffer) throws { try self.init(bytes: try buffer.read(sizeof(UInt32))) }
     
-    func write(buffer: ByteBuffer) { buffer.write(self.bytes) }
+    public static func read(buffer: ByteBuffer) throws -> UInt32
+    {
+        return try UInt32(buffer: buffer)
+    }
+
+    public func write(buffer: ByteBuffer) { buffer.write(self.toBytes()) }
 }
 
 extension Int32 : ByteBufferable
 {
-    var bytes : [Byte] { return UInt32(bitPattern: self).bytes }
+//    var bytes : [Byte] { return UInt32(bitPattern: self).bytes }
     
-    init(bytes: [Byte]) throws { self.init(bitPattern: try UInt32(bytes: bytes)) }
+    public init(bytes: [Byte]) throws { self.init(bitPattern: try UInt32(bytes: bytes)) }
     
-    init(buffer: ByteBuffer) throws { try self.init(bytes: try buffer.read(sizeof(Int32))) }
+    public init(buffer: ByteBuffer) throws { try self.init(bytes: try buffer.read(sizeof(Int32))) }
     
-    func write(buffer: ByteBuffer) { buffer.write(self.bytes) }
+    public static func read(buffer: ByteBuffer) throws -> Int32
+    {
+        return try Int32(buffer: buffer)
+    }
+
+    public func write(buffer: ByteBuffer) { buffer.write(self.toBytes()) }
 }
 
 extension UInt64 : ByteBufferable
 {
-    var bytes : [Byte] {
-        
-        let mask = UInt64(0xff)
-        
-        return [7, 6, 5, 4, 3, 2, 1, 0].map{ Byte( (self >> (8 * $0)) & mask ) }
-    }
+//    var bytes : [Byte] {
+//        
+//        let mask = UInt64(0xff)
+//        
+//        return [7, 6, 5, 4, 3, 2, 1, 0].map{ Byte( (self >> (8 * $0)) & mask ) }
+//    }
     
-    init(bytes: [Byte]) throws
+  public init(bytes: [Byte]) throws
     {
         switch bytes.count
         {
@@ -463,42 +508,52 @@ extension UInt64 : ByteBufferable
             
         default:
             throw BytesConvertibleError.MalformedBytes(bytes)
-        }
+         }
     }
 
-    init(buffer: ByteBuffer) throws { try self.init(bytes: try buffer.read(sizeof(UInt64))) }
-    
-    func write(buffer: ByteBuffer) { buffer.write(self.bytes) }
+    public init(buffer: ByteBuffer) throws { try self.init(bytes: try buffer.read(sizeof(UInt64))) }
+
+    public static func read(buffer: ByteBuffer) throws -> UInt64
+    {
+        return try UInt64(buffer: buffer)
+    }
+
+    public func write(buffer: ByteBuffer) { buffer.write(self.toBytes()) }
 }
 
 extension Int64 : ByteBufferable
 {
-    var bytes : [Byte] { return UInt64(bitPattern: self).bytes }
+//    var bytes : [Byte] { return UInt64(bitPattern: self).bytes }
     
-    init(bytes: [Byte]) throws { self.init(bitPattern: try UInt64(bytes: bytes)) }
+    public init(bytes: [Byte]) throws { self.init(bitPattern: try UInt64(bytes: bytes)) }
     
-    init(buffer: ByteBuffer) throws { try self.init(bytes: try buffer.read(sizeof(Int64))) }
+    public init(buffer: ByteBuffer) throws { try self.init(bytes: try buffer.read(sizeof(Int64))) }
     
-    func write(buffer: ByteBuffer) { buffer.write(self.bytes) }
+    public static func read(buffer: ByteBuffer) throws -> Int64
+    {
+        return try Int64(buffer: buffer)
+    }
+    
+    public func write(buffer: ByteBuffer) { buffer.write(toBytes()) }
 }
 
-extension Int : ByteBufferable
+extension Int : BytesInitializable
 {
-    var bytes : [Byte]
+    public func toBytes() -> [Byte]
         {
             if self > Int(Int8.min) && self < Int(Int8.max)
             {
-                return Int8(self).bytes
+                return Int8(self).toBytes()
             }
             
             if self > Int(Int16.min) && self < Int(Int16.max)
             {
-                return Int16(self).bytes
+                return Int16(self).toBytes()
             }
             
             if self > Int(Int32.min) && self < Int(Int32.max)
             {
-                return Int32(self).bytes
+                return Int32(self).toBytes()
             }
             
             let mask = 0xff
@@ -508,7 +563,7 @@ extension Int : ByteBufferable
             return count.map{ Byte( (self >> (8 * $0)) & mask ) }
     }
     
-    init(bytes: [Byte]) throws
+    public init(bytes: [Byte]) throws
     {
         switch bytes.count
         {
@@ -524,39 +579,74 @@ extension Int : ByteBufferable
             throw BytesConvertibleError.MalformedBytes(bytes)
         }
     }
-    
-    init(buffer: ByteBuffer) throws { try self.init(bytes: try buffer.read(1, dynamic: true)) }
-    
-    func write(buffer: ByteBuffer) { buffer.write(self.bytes, optionalPrefixCount: 1) }
-}
 
-extension UInt : ByteBufferable
-{
-    var bytes : [Byte]
-        {
-            if self < UInt(UInt8.max)
-            {
-                return UInt8(self).bytes
-            }
-            
-            if self < UInt(UInt16.max)
-            {
-                return UInt16(self).bytes
-            }
-            
-            if self < UInt(UInt32.max)
-            {
-                return UInt32(self).bytes
-            }
+    public typealias FromBytesConvertibleType = Int
 
-            let mask = UInt(0xff)
-
-            let count = 0.stride(to: sizeof(UInt), by: 1).reverse()
-
-            return count.map{ Byte( (self >> UInt(8 * $0)) & mask ) }
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, Int)
+    {
+        guard offset + 8 <= bytes.count else { throw BytesConvertibleError.InsufficientBytes(8, offset) }
+        
+        let intBytes = Array(bytes[offset..<offset + 8])
+        
+        return (offset + 8, try Int(bytes: intBytes))
     }
     
-    init(bytes: [Byte]) throws
+}
+extension Int : ByteBufferable
+{
+    public static func read(buffer: ByteBuffer) throws -> Int
+    {
+        return try Int(bytes: try buffer.read(1, dynamic: true))
+    }
+    
+//    public init(buffer: ByteBuffer) throws { try self.init(bytes: try buffer.read(1, dynamic: true)) }
+    
+    public func write(buffer: ByteBuffer) { buffer.write(toBytes(), optionalPrefixCount: 1) }
+}
+
+extension UInt : BytesConvertible
+{
+    typealias FormBytesConvertibleType = UInt
+    
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, UInt)
+    {
+        let length = sizeofValue(UInt)
+        
+        guard bytes.count >= offset + length else { throw BytesConvertibleError.InsufficientBytes(offset, length) }
+        
+        var pointer = UnsafePointer<Byte>(bytes)
+        pointer = pointer.advancedBy(offset)
+        
+        let uIntPointer =  UnsafePointer<UInt>(pointer)
+        
+        return (offset + length, uIntPointer.memory)
+    }
+    
+    public func toBytes() -> [Byte]
+    {
+        if self < UInt(UInt8.max)
+        {
+            return UInt8(self).toBytes()
+        }
+        
+        if self < UInt(UInt16.max)
+        {
+            return UInt16(self).toBytes()
+        }
+        
+        if self < UInt(UInt32.max)
+        {
+            return UInt32(self).bytes
+        }
+        
+        let mask = UInt(0xff)
+        
+        let count = 0.stride(to: sizeof(UInt), by: 1).reverse()
+        
+        return count.map{ Byte( (self >> UInt(8 * $0)) & mask ) }
+    }
+    
+    public init(bytes: [Byte]) throws
     {
         switch bytes.count
         {
@@ -580,8 +670,156 @@ extension UInt : ByteBufferable
             throw BytesConvertibleError.MalformedBytes(bytes)
         }
     }
-    
-    init(buffer: ByteBuffer) throws { try self.init(bytes: try buffer.read(1, dynamic: true)) }
-    
-    func write(buffer: ByteBuffer) { buffer.write(self.bytes, optionalPrefixCount: 1) }
 }
+
+
+extension UInt : ByteBufferable
+{
+    public init(buffer: ByteBuffer) throws { try self.init(bytes: try buffer.read(1, dynamic: true)) }
+
+    public static func read(buffer: ByteBuffer) throws -> UInt
+    {
+        return try UInt(buffer: buffer)
+    }
+    
+    public func write(buffer: ByteBuffer) { buffer.write(self.toBytes(), optionalPrefixCount: 1) }
+}
+
+// MARK: - BytesConvertible
+
+// MARK: 16-bit
+
+extension UInt16 : BytesConvertible
+{
+    public func toBytes() -> [Byte]
+    {
+        let mask = UInt16(0xff)
+        
+//        let count = 0.stride(to: sizeof(self.dynamicType), by: 1).reverse()
+        
+        return [1, 0].map{ Byte( (self >> (8 * $0)) & mask ) }
+    }
+    
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, UInt16)
+    {
+        let size = sizeof(UInt16)
+        
+        guard bytes.count > offset + size else { throw BytesConvertibleError.InsufficientBytes(size, 0) }
+        
+        var value = UInt16(0)
+        
+        for index in offset..<offset+size
+        {
+            value = value << 8 + UInt16(bytes[index])
+        }
+        
+//        let value = bytes[offset..<offset+size].reduce(UInt16(0)) { ($0 << 8) + UInt16($1) }
+        
+        return (offset + size, value)
+    }
+}
+
+
+extension Int16 : BytesConvertible
+{
+    public func toBytes() -> [Byte] { return UInt16(bitPattern: self).toBytes() }
+    
+    public typealias FromBytesConvertibleType = Int16
+    
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, Int16)
+    {
+        let (off , uInt) = try UInt16.fromBytes(bytes, offset: offset)
+        
+        return (off, Int16(bitPattern: uInt))
+    }
+}
+
+// MARK: 32-bit
+
+
+extension UInt32 : BytesConvertible
+{
+    public func toBytes() -> [Byte]
+    {
+        let mask = UInt32(0xff)
+        
+        return [3, 2, 1, 0].map{ Byte( (self >> (8 * $0)) & mask ) }
+    }
+    
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, UInt32)
+    {
+        let size = sizeof(UInt32)
+        
+        guard bytes.count > offset + size else { throw BytesConvertibleError.InsufficientBytes(size, 0) }
+        
+        var value = UInt32(0)
+        
+        for index in offset..<offset+size
+        {
+            value = value << 8 + UInt32(bytes[index])
+        }
+        
+        return (offset + size, value)
+    }
+}
+
+extension Int32 : BytesConvertible
+{
+    public func toBytes() -> [Byte] { return UInt32(bitPattern: self).toBytes() }
+    
+    public typealias FromBytesConvertibleType = Int32
+    
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, Int32)
+    {
+        let (off , uInt) = try UInt32.fromBytes(bytes, offset: offset)
+        
+        return (off, Int32(bitPattern: uInt))
+    }
+}
+
+// MARK: 64-bit
+
+extension UInt64 : BytesConvertible
+{
+    public func toBytes() -> [Byte]
+    {
+        let mask = UInt64(0xff)
+        
+        return [7, 6, 5, 4, 3, 2, 1, 0].map{ Byte( (self >> (8 * $0)) & mask ) }
+    }
+    
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, UInt64)
+    {
+        let size = sizeof(UInt64)
+        
+        guard bytes.count > offset + size else { throw BytesConvertibleError.InsufficientBytes(size, 0) }
+        
+        var value = UInt64(0)
+        
+        for index in offset..<offset+size
+        {
+            value = value << 8 + UInt64(bytes[index])
+        }
+        
+        return (offset + size, value)
+    }
+}
+
+extension Int64 : BytesConvertible
+{
+    public func toBytes() -> [Byte]
+    {
+         return UInt64(bitPattern: self).toBytes()
+    }
+    
+    public typealias FromBytesConvertibleType = Int64
+    
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, Int64)
+    {
+        let (off , uInt) = try UInt64.fromBytes(bytes, offset: offset)
+        
+        return (off, Int64(bitPattern: uInt))
+    }
+}
+
+

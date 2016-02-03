@@ -149,14 +149,7 @@ class GenericChoice<Option:Hashable where Option:ByteBufferable> : ByteBufferabl
     {
         if optionalOption == chosenOption
         {
-//            if optionalOption != defaultOption
-//            {
-                return chooseOption(defaultOption)
-//            }
-//            else if let otherOption = options.filter({ $0 != defaultOption && $0 != optionalOption }).random()
-//            {
-//                return chooseOption(otherOption)
-//            }
+            return chooseOption(defaultOption)
         }
         
         return false
@@ -215,6 +208,20 @@ class GenericChoice<Option:Hashable where Option:ByteBufferable> : ByteBufferabl
         {
             throw e
         }
+    }
+    
+    static func read(buffer: ByteBuffer) throws -> Self
+    {
+        return try self.init(buffer: buffer)
+        
+//        let committed : Bool = try buffer.read()
+//        let forcedOption : Option? = try buffer.readOptional()
+//        let options : Set<Option> = try buffer.read()//Set<Option>(buffer)
+//        let defaultOption : Option? = try buffer.readOptional()
+//        let chosenOption : Option? = try buffer.readOptional()
+//        
+//        
+//        return self.init(options: options, defaultOption: defaultOption, chosenOption: chosenOption, forcedOption: forcedOption, committed: committed)
     }
     
     func write(buffer: ByteBuffer)

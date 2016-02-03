@@ -37,6 +37,15 @@ extension CGSize
     }
 }
 
+
+//MARK: - Width and Height
+
+extension CGSize
+{
+    public var minWidthHeight : CGFloat { return min(width, height) }
+    public var maxWidthHeight : CGFloat { return max(width, height) }
+}
+
 // MARK: Equatable
 //
 //extension CGSize//: Equatable
@@ -51,6 +60,21 @@ extension CGSize
 //{
 //    return s1.width == s2.width && s1.height == s2.height
 //}
+
+// MARK: - ceil
+
+public func ceil(size: CGSize) -> CGSize
+{
+    return CGSize(width: ceil(size.width), height: ceil(size.height))
+}
+
+// MARK: - floor
+
+public func floor(size: CGSize) -> CGSize
+{
+    return CGSize(width: floor(size.width), height: floor(size.height))
+}
+
 
 // MARK: operators
 

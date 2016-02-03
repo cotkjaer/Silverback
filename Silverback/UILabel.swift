@@ -6,16 +6,52 @@
 //  Copyright © 2015 Christian Otkjær. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+// MARK: - init
+
+extension UILabel
+{
+    public convenience init(text: String?, color: UIColor?)
+    {
+        self.init(frame: CGRectZero)
+        
+        self.text = text
+        
+        if let c = color
+        {
+            textColor = c
+        }
+        
+        sizeToFit()
+    }
+}
+
 
 //MARK: - Set Text Animated
 
 extension UILabel
 {
     /// crossfades the existing text with the `text` parameters in `duration`seconds
-    public func setText(text: String, duration: Double)
+    public func setText(text: String, duration: Double, ifDifferent: Bool = true)
     {
-        UIView.transitionWithView(self, duration: duration, options: [.TransitionCrossDissolve], animations: { self.text = text }, completion: nil)
+        if (ifDifferent && text != self.text) || !ifDifferent
+        {
+            UIView.transitionWithView(self, duration: duration, options: [.TransitionCrossDissolve], animations: { self.text = text }, completion: nil)
+        }
+    }
+}
+
+// MARK: - Fontname
+
+extension UILabel
+{
+    public var fontName : String
+        {
+        get { return font.fontName }
+        set { if fontName != newValue { if let newFont = UIFont(name: newValue, size: font.pointSize) { font = newFont } else { debugPrint("Cannot make font with name \(newValue)") } }
+        }
+        
     }
 }
 
@@ -215,4 +251,53 @@ public class ClockLabel: UILabel
         timer = nil
     }
     
+}
+
+//MARK: - Size Adjust
+
+extension UILabel
+{
+    public func adjustFontSizeToFitRect(rect : CGRect)
+    {
+        guard text != nil else { return }
+        
+        frame = rect
+        
+        let MaxFontSize: CGFloat = 512
+        let MinFontSize: CGFloat = 4
+        
+        var q = Int(MaxFontSize)
+        var p = Int(MinFontSize)
+        
+        let constraintSize = CGSize(width: rect.width, height: CGFloat.max)
+        
+        while(p <= q)
+        {
+            let currentSize = (p + q) / 2
+            
+            font = UIFont(descriptor: font.fontDescriptor(), size: CGFloat(currentSize))
+            
+            let text = NSAttributedString(string: self.text!, attributes: [NSFontAttributeName:font])
+            
+            let textRect = text.boundingRectWithSize(constraintSize, options: .UsesLineFragmentOrigin, context: nil)
+            
+            let labelSize = textRect.size
+            
+            if labelSize.height < frame.height &&
+                labelSize.height >= frame.height - 10 &&
+                labelSize.width < frame.width &&
+                labelSize.width >= frame.width - 10
+            {
+                break
+            }
+            else if labelSize.height > frame.height || labelSize.width > frame.width
+            {
+                q = currentSize - 1
+            }
+            else
+            {
+                p = currentSize + 1
+            }
+        }
+    }
 }

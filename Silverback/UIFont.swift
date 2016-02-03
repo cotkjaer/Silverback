@@ -6,7 +6,7 @@
 //  Copyright © 2015 Christian Otkjær. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 //MARK: - UIFont
 

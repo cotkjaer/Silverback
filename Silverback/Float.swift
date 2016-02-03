@@ -102,3 +102,207 @@ public extension Float
     }
 }
 
+public func rms(xs: Float...)
+{
+    
+}
+
+
+///The root mean square (abbreviated RMS or rms), also known as the quadratic mean, in statistics is a statistical measure defined as the square root of the mean of the squares of a sample
+/// - Note: With large numbers this may overrun
+@warn_unused_result
+public func rms<S: SequenceType where S.Generator.Element == Float>(xs: S) -> Float
+{
+    let count = xs.count{ _ in true }
+    
+    guard count > 0 else { return 0 }
+    
+    let sum = xs.reduce(Float(0), combine: { $0 + $1*$1 })
+    
+    return sqrtf(sum / Float(count))
+}
+
+public func rms(xs: [Float], firstIndex: Int, lastIndex: Int) -> Float
+{
+    return rms(xs[firstIndex...lastIndex])
+}
+
+///The simplest (and by no means ideal) low-pass filter is given by the following difference equation: 
+///```swift
+/// y(n) = x(n) + x(n - 1)
+///```
+///where `x(n)` is the filter input amplitude at time (or sample) `n` , and `y(n)` is the output amplitude at time `n`
+//func lowpass(x: [Float], inout y: [Float], xm1: Float, m: Int, offset: Int) -> Float
+//{
+//    y[offset] = x[offset] + xm1
+//    
+//    for var n = 1; n < m ; n++
+//    {
+//        y[offset + n] =  x[offset + n] + x[offset + n-1]
+//    }
+//    
+//    return x[offset + m-1]
+//}
+
+public func lowpass(xs: [Float]) -> [Float]
+{
+    let M = xs.count
+    
+    guard M > 0 else { return [] }
+    
+    var ys = Array<Float>(count: xs.count, repeatedValue: Float(0))
+    
+    ys[0] = xs[0]
+    
+    for var n = 1; n < M; n++
+    {
+        ys[n] = xs[n] + xs[n-1]
+    }
+
+    return ys
+}
+
+// MARK: - Int interoperability
+
+public func * (rhs: Float, lhs: Int) -> Float
+{
+    return rhs * Float(lhs)
+}
+
+public func * (rhs: Int, lhs: Float) -> Float
+{
+    return Float(rhs) * lhs
+}
+
+public func *= (inout rhs: Float, lhs: Int)
+{
+    rhs *= Float(lhs)
+}
+
+
+public func / (rhs: Float, lhs: Int) -> Float
+{
+    return rhs / Float(lhs)
+}
+
+public func / (rhs: Int, lhs: Float) -> Float
+{
+    return Float(rhs) / lhs
+}
+
+public func /= (inout rhs: Float, lhs: Int)
+{
+    rhs /= Float(lhs)
+}
+
+
+public func + (rhs: Float, lhs: Int) -> Float
+{
+    return rhs + Float(lhs)
+}
+
+public func + (rhs: Int, lhs: Float) -> Float
+{
+    return Float(rhs) + lhs
+}
+
+public func += (inout rhs: Float, lhs: Int)
+{
+    rhs += Float(lhs)
+}
+
+
+public func - (rhs: Float, lhs: Int) -> Float
+{
+    return rhs - Float(lhs)
+}
+
+public func - (rhs: Int, lhs: Float) -> Float
+{
+    return Float(rhs) - lhs
+}
+
+public func -= (inout rhs: Float, lhs: Int)
+{
+    rhs -= Float(lhs)
+}
+
+// MARK: - BytesConvertible
+
+public func parseFloat32(bytes: [Byte], offset: Int) -> Float32
+{
+    var pointer = UnsafePointer<Byte>(bytes)
+    pointer = pointer.advancedBy(offset)
+    
+    let fPointer =  UnsafePointer<Float32>(pointer)
+    return fPointer.memory
+}
+
+public func parseFloat(bytes: [Byte], offset: Int) -> Float
+{
+    var pointer = UnsafePointer<Byte>(bytes)
+    pointer = pointer.advancedBy(offset)
+    
+    let fPointer =  UnsafePointer<Float>(pointer)
+    return fPointer.memory
+}
+
+extension Float : BytesConvertible
+{
+    public func toBytes() -> [Byte]
+    {
+        let size = sizeofValue(Float)
+        
+        let bytes = Array<Byte>(count:size, repeatedValue: 0)
+    
+        var this = self
+        
+        withUnsafeMutablePointer(&this) { (fPointer) -> () in
+            memcpy(fPointer, bytes, size)
+        }
+        
+        return bytes
+    }
+    
+    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, Float)
+    {
+        let size = sizeofValue(Float)
+        
+        guard bytes.count >= size + offset else { throw BytesConvertibleError.InsufficientBytes(size, 0) }
+        
+        var pointer = UnsafePointer<Byte>(bytes)
+        pointer = pointer.advancedBy(offset)
+        
+        let fPointer =  UnsafePointer<Float>(pointer)
+        return (offset + size, fPointer.memory)
+    }
+    
+    public init(bytes: [Byte]) throws
+    {
+        (_, self) = try Float.fromBytes(bytes, offset: 0)
+    }
+}
+
+// MARK: - ByteBufferable
+
+extension Float : ByteBufferable
+{
+    public init(buffer: ByteBuffer) throws
+    {
+        let bytes = try buffer.read(sizeofValue(Float))
+        
+        try self.init(bytes:bytes)
+    }
+    
+    public static func read(buffer: ByteBuffer) throws -> Float
+    {
+        return try Float(buffer: buffer)
+    }
+    
+
+    
+    public func write(buffer: ByteBuffer)
+    {
+        buffer.write(toBytes())
+    }
+}

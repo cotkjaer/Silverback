@@ -8,17 +8,34 @@
 
 import Foundation
 
-//internal func flatMap<T, U>(array: [T], f: (T) -> ([U])) -> [U]
-//{
-//    return flatten(array.map(f))
-//}
-//
-//public func flatten<T>(array: [[T]]) -> [T]
-//{
-//    return array.reduce([], combine: +)
-//}
-//
-//
+//MARK: - Functional Inits
+
+extension Array
+{
+    /// Init with elements produced by calling `block`, `count`times.
+    init(count: Int, @noescape block: (Int) -> Element)
+    {
+        self.init()
+        
+        for i in 0..<count
+        {
+            append(block(i))
+        }
+    }
+    
+    /// Init with elements produced by `block`. 
+    /// -warning: Calls `block` until it returns nil
+    init(@noescape block: () -> Element?)
+    {
+        self.init()
+        
+        while let e = block()
+        {
+            append(e)
+        }
+    }
+}
+
 
 // MARK: - Safe versions of standard array operations
 public extension Array
@@ -194,11 +211,17 @@ public extension Array
     */
     mutating func shuffle()
     {
-        for var i = count - 1; i >= 1; i--
+        if count > 1
         {
-            let j = Int.random(lower: 0, upper: i+1)
-            
-            swap(&self[i], &self[j])
+            for var i = count - 1; i >= 1; i--
+            {
+                let j = Int.random(lower: 0, upper: i+1)
+                
+                if j != i
+                {
+                    swap(&self[i], &self[j])
+                }
+            }
         }
     }
     
@@ -530,15 +553,58 @@ public extension Array
         }
     }
     
+
     /**
-    Runs a binary search to find the smallest element for which the block evaluates to true
-    The block should return true for all items in the array above a certain point and false for all items below a certain point
-    If that point is beyond the furthest item in the array, it returns nil
+     Runs a binary search to find the **last** element for which the predicate evaluates to `true`.
+     
+     The predicate should return `true` for all elements in the array below a certain index and `false` for all elements above that index
+     
+     - parameter predicate: the predicate to test elements
+     - returns: The found index and element, or `nil` if there are no elements in the array for which the predicate returns `true`
+     */
+    @warn_unused_result
+    public func lastWhere(@noescape predicate: Element -> Bool) -> (Int, Element)?
+    {
+        guard count > 0 else { return nil }
+        
+        var low = 0
+        var high = count - 1
+        
+        while low <= high
+        {
+            let mid = (high + low) / 2
+            
+            if predicate(self[mid])
+            {
+                if mid == high || !predicate(self[mid + 1])
+                {
+                    return (mid, self[mid])
+                }
+                else
+                {
+                    low = mid + 1
+                }
+            }
+            else
+            {
+                high = mid - 1
+            }
+        }
+        
+        return nil
+    }
+
     
-    - parameter block: the block to run each time
-    - returns: the min element, or nil if there are no items for which the block returns true
-    */
-    func bSearch (block: (Element) -> (Bool)) -> Element?
+    /**
+     Runs a binary search to find the first element for which the predicate evaluates to **true**
+     The predicate should return **false** for all elements in the array below a certain index and **true** for all elements above that index
+     If that index is beyond the last index in the array, nil is returned
+     
+     - parameter predicate: the predicate to test elements
+     - returns: the first index and element at that index, or nil if there are no elements for which the predicate returns true
+     */
+    @warn_unused_result
+    public func firstWhere(@noescape predicate: Element -> Bool) -> (Int, Element)?
     {
         if count == 0
         {
@@ -550,11 +616,53 @@ public extension Array
         while low <= high
         {
             let mid = low + (high - low) / 2
-            if block(self[mid])
+            
+            if predicate(self[mid])
             {
-                if mid == 0 || !block(self[mid - 1])
+                if mid == 0 || !predicate(self[mid - 1])
                 {
-                    return self[mid]
+                    return (mid, self[mid])
+                }
+                else
+                {
+                    high = mid
+                }
+            }
+            else
+            {
+                low = mid + 1
+            }
+        }
+        
+        return nil
+    }
+    
+    /**
+    Runs a binary search to find the smallest element for which the predicate evaluates to true
+    The predicate should return true for all elements in the array above a certain index and false for all elements below a certain index
+    If that index is beyond the last index in the array, it returns nil
+    
+    - parameter predicate: the predicate to test each element
+    - returns: the min index and element at that index, or nil if there are no elements for which the predicate returns true
+    */
+    public func bSearch(predicate: Element -> Bool) -> (Int, Element)?
+    {
+        if count == 0
+        {
+            return nil
+        }
+        
+        var low = 0
+        var high = count - 1
+        while low <= high
+        {
+            let mid = low + (high - low) / 2
+            
+            if predicate(self[mid])
+            {
+                if mid == 0 || !predicate(self[mid - 1])
+                {
+                    return (mid, self[mid])
                 }
                 else
                 {
@@ -590,9 +698,9 @@ public extension Array
                 item in
                 block(item) >= 0
         }
-        if let match = match
+        if let (_, element) = match
         {
-            return block(match) == 0 ? match : nil
+            return block(element) == 0 ? element : nil
         }
         else
         {
@@ -694,6 +802,13 @@ public extension Array where Element : Equatable
     {
         return enumerate().filter{!otherArray.contains($0.element)}.map{$0.index}
     }
+}
+
+//MARK: - Last Index
+
+extension Array
+{
+    public var lastIndex : Index? { return isEmpty ?  nil : count - 1 }
 }
 
 /**

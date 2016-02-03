@@ -42,6 +42,18 @@ public class NotificationHandlerManager
         observerTokens.append(notificationCenter.addObserverForName(name, object: object, queue: queue, usingBlock: { handler(notification: $0) }))
     }
     
+    public func onAny(from object: AnyObject, perform: (() -> ()))
+    {
+        registerHandlerForNotification(nil, object: object, queue: nil) { _ in perform() }
+    }
+
+    public func on(notificationName: String, from object: AnyObject? = nil, perform: (() -> ()))
+    {
+        registerHandlerForNotification(notificationName, object: object, queue: nil) { _ in perform() }
+    }
+
+    
+    
     public func when(notificationName: String, with object: AnyObject? = nil, perform: (() -> ()))
     {
         registerHandlerForNotification(notificationName, object: object, queue: nil) { _ in perform() }
@@ -55,6 +67,35 @@ public class NotificationHandlerManager
                 perform(t)
             }
         }
+    }
+}
+
+import UIKit
+
+//MARK: - Keyboard
+
+extension NotificationHandlerManager
+{
+    public func animateAlongsideKeyboardFrameChange(animations: (keyboardBeginFrame:CGRect?, keyboardEndFrame: CGRect?) -> (), completion: ((completed: Bool) -> ())?)
+    {
+        registerHandlerForNotification(UIKeyboardWillChangeFrameNotification) { (notification) -> () in
+            if let userInfo = notification.userInfo
+            {
+                let endFrame = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue
+                let beginFrame = userInfo[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue
+                let animationCurveRaw = userInfo[UIKeyboardAnimationCurveUserInfoKey]?.unsignedLongValue ?? UIViewAnimationOptions.CurveEaseInOut.rawValue
+                let animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue ?? 0
+                
+                let animationCurve:UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
+
+                UIView.animateWithDuration(animationDuration,
+                    delay: 0,
+                    options: animationCurve,
+                    animations: { animations(keyboardBeginFrame: beginFrame, keyboardEndFrame: endFrame) },
+                    completion: completion)
+            }
+        }
+
     }
 
 }

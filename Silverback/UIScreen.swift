@@ -8,42 +8,42 @@
 
 import UIKit
 
-//MARK: - Brightness
-
-let StepsPerSecond : CGFloat = 20
-let StepSize = 1 / StepsPerSecond
-
-class BrightnessController
-{
-//    var timer : NSTimer?
-    
-    var tasks = Array<Task>()
-    
-    func setBrightness(brightness: CGFloat, duration: Double)
-    {
-        tasks.forEach { $0.unschedule() }
-        tasks.removeAll(keepCapacity: true)
-        
-        let b1 = UIScreen.mainScreen().brightness
-        let b2 = max(0, min(1, brightness))
-        let T = CGFloat(max(0.1, duration))
-        
-        //easing function
-        let f = { (t:CGFloat) -> CGFloat in return (b1 * (T - t) + b2 * t) / T }
-        
-        let steps = T.stride(to: 0, by: -StepSize).map { return ($0, f($0)) }.reverse()
-        
-        steps.forEach { (t, b) in
-            if t > StepSize / 2
-            {
-                let task = Task({ UIScreen.mainScreen().brightness = b })
-                task.schedule(Double(t))
-                
-                tasks.append(task)
-            }
-        }
-    }
-}
+////MARK: - Brightness
+//
+//let StepsPerSecond : CGFloat = 20
+//let StepSize = 1 / StepsPerSecond
+//
+//class BrightnessController
+//{
+////    var timer : NSTimer?
+//    
+//    var tasks = Array<Task>()
+//    
+//    func setBrightness(brightness: CGFloat, duration: Double)
+//    {
+//        tasks.forEach { $0.unschedule() }
+//        tasks.removeAll(keepCapacity: true)
+//        
+//        let b1 = UIScreen.mainScreen().brightness
+//        let b2 = max(0, min(1, brightness))
+//        let T = CGFloat(max(0.1, duration))
+//        
+//        //easing function
+//        let f = { (t:CGFloat) -> CGFloat in return (b1 * (T - t) + b2 * t) / T }
+//        
+//        let steps = T.stride(to: 0, by: -StepSize).map { return ($0, f($0)) }.reverse()
+//        
+//        steps.forEach { (t, b) in
+//            if t > StepSize / 2
+//            {
+//                let task = Task({ UIScreen.mainScreen().brightness = b })
+//                task.schedule(Double(t))
+//                
+//                tasks.append(task)
+//            }
+//        }
+//    }
+//}
 
 
 //private let brightnessController = BrightnessController()
@@ -132,4 +132,9 @@ extension UIScreen
 //            }
 //        }
     }
+}
+
+public func setBrightness(brightness: CGFloat, duration: Double)
+{
+    brightnessAnimator.animateFloat(Float(brightness), duration:duration)
 }

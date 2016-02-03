@@ -12,6 +12,13 @@ import Foundation
 
 extension NSDateFormatter
 {
+    public convenience init(dateFormat: String)
+    {
+        self.init()
+        
+        self.dateFormat = dateFormat
+    }
+    
     public convenience init(timeStyle: NSDateFormatterStyle, dateStyle: NSDateFormatterStyle)
     {
         self.init()
