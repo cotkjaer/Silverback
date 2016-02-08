@@ -16,15 +16,11 @@ public class HexCollectionViewLayout: UICollectionViewLayout
     
     @IBInspectable public var sectionGrowthDirection: HexOrientation = .Horizontal
     
-    
     public var numberOfHexesToFitHorizontally : CGFloat?
         { didSet { if numberOfHexesToFitHorizontally != oldValue { invalidateLayout() } } }
     
     public var numberOfHexesToFitVertically : CGFloat?
         { didSet { if numberOfHexesToFitVertically != oldValue { invalidateLayout() } } }
-    
-    //    public var fitLines : Bool = false
-    //        { didSet { if fitLines != oldValue { invalidateLayout() } } }
     
     /**
     Defines the orientation of the Hexagons

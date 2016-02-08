@@ -10,21 +10,6 @@ import Foundation
 import UIKit
 import ContactsUI
 
-public extension UILayoutConstraintAxis
-{
-    public var other: UILayoutConstraintAxis
-        {
-            switch self
-            {
-            case .Vertical: return .Horizontal
-            case .Horizontal: return .Vertical
-                
-            }
-    }
-}
-
-public func isSimulator() -> Bool { return UIDevice.currentDevice().name.hasSuffix("Simulator") }
-
 public class ConnectionEndpoint
 {
     public enum Type

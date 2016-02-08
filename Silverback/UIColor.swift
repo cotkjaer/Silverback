@@ -10,9 +10,10 @@ import UIKit
 
 // MARK: - opaque
 
-extension UIColor
+public extension UIColor
 {
     var alpha : CGFloat { return rgba.alpha }
+    
     var opaque : Bool { return alpha > 0.9999 }
 }
 
@@ -43,9 +44,9 @@ public extension UIColor
     var red : CGFloat { return rgba.red }
     var green : CGFloat { return rgba.green }
     var blue : CGFloat { return rgba.blue }
-
+    
     var rgb : (red:CGFloat, green:CGFloat, blue:CGFloat) { let tmp = rgba; return (red: tmp.red, green: tmp.green, blue: tmp.blue) }
-
+    
     var rgba : (red:CGFloat, green:CGFloat, blue:CGFloat, alpha:CGFloat) {
         var red : CGFloat = 0
         var green : CGFloat = 0
@@ -56,19 +57,19 @@ public extension UIColor
         
         return (red, green, blue, alpha)
     }
-
+    
     var white : CGFloat
         {
             let rgb = self.rgb
-        return (rgb.red + rgb.green + rgb.blue) / CGFloat(3)
+            return (rgb.red + rgb.green + rgb.blue) / CGFloat(3)
     }
 }
 
 // MARK: - HSB
 
-extension UIColor
+public extension UIColor
 {
-    public var hsba : (CGFloat, CGFloat, CGFloat, CGFloat)? {
+    var hsba : (CGFloat, CGFloat, CGFloat, CGFloat)? {
         var hue : CGFloat = 0
         var saturation : CGFloat = 0
         var brightness : CGFloat = 0
@@ -94,27 +95,27 @@ extension UIColor
             return (h,s,b,a)
     }
     
-    public var hue: CGFloat { return hsbComponents.0 }
+    var hue: CGFloat { return hsbComponents.0 }
     
-    public func withHue(hue: CGFloat) -> UIColor
+    func withHue(hue: CGFloat) -> UIColor
     {
         let hsba = hsbComponents
         
         return UIColor(hue: hue, saturation: hsba.1, brightness: hsba.2, alpha: hsba.3)
     }
     
-    public var saturation: CGFloat { return hsbComponents.1 }
+    var saturation: CGFloat { return hsbComponents.1 }
     
-    public func withSaturation(saturation: CGFloat) -> UIColor
+    func withSaturation(saturation: CGFloat) -> UIColor
     {
         let hsba = hsbComponents
         
         return UIColor(hue: hsba.0, saturation: saturation, brightness: hsba.2, alpha: hsba.3)
     }
     
-    public var brightness: CGFloat { return hsbComponents.2 }
+    var brightness: CGFloat { return hsbComponents.2 }
     
-    public func withBrightness(brightness: CGFloat) -> UIColor
+    func withBrightness(brightness: CGFloat) -> UIColor
     {
         let hsba = hsbComponents
         
@@ -124,20 +125,20 @@ extension UIColor
 
 //MARK: - Brightness
 
-extension UIColor
+public extension UIColor
 {
     //MARK: - Brightness
     
-    public var isBright: Bool { return brightness > 0.75 }
-
-    public var isDark: Bool { return brightness < 0.25 }
+    var isBright: Bool { return brightness > 0.75 }
     
-    public func brighterColor(factor: CGFloat = 0.5) -> UIColor
+    var isDark: Bool { return brightness < 0.25 }
+    
+    func brighterColor(factor: CGFloat = 0.5) -> UIColor
     {
         return withBrightness(brightness + (1 - brightness) * factor)
     }
     
-    public func darkerColor(factor: CGFloat = 0.5) -> UIColor
+    func darkerColor(factor: CGFloat = 0.5) -> UIColor
     {
         return withBrightness(brightness - (brightness) * factor)
     }
@@ -147,30 +148,84 @@ extension UIColor
 
 public extension UIColor
 {
-    public var image: UIImage
-        {
-            let rect = CGRectMake(0, 0, 1, 1)
-            
-            UIGraphicsBeginImageContextWithOptions(rect.size, opaque, 0)
-            
-            let context = UIGraphicsGetCurrentContext()
-            
-            CGContextSetFillColorWithColor(context, self.CGColor)
-            CGContextFillRect(context, rect)
-            let image = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            
-            return image
+    func image() -> UIImage
+    {
+        let rect = CGRectMake(0, 0, 1, 1)
+        
+        UIGraphicsBeginImageContextWithOptions(rect.size, opaque, 0)
+        defer { UIGraphicsEndImageContext() }
+        
+        let path = UIBezierPath(rect: rect)
+        
+        setFill()
+        
+        path.fill()
+        
+//        let context = UIGraphicsGetCurrentContext()
+//        
+//        CGContextSetFillColorWithColor(context, self.CGColor)
+//        CGContextFillRect(context, rect)
+        
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
 
 //MARK: - Random
+
+private func CGFloatRandomColorComponent(minValue: CGFloat, _ maxValue: CGFloat) -> CGFloat
+{
+    let realMinValue = max(0, min(minValue, maxValue))
+    let realMaxValue = min(1, max(minValue, maxValue))
+    
+    return CGFloat.random(lower: realMinValue, upper: realMaxValue)
+}
 
 public extension UIColor
 {
     static func random() -> UIColor
     {
         return UIColor(r: Int.random(lower: 0,upper: 256), g: Int.random(lower: 0,upper: 256), b: Int.random(lower: 0,upper: 256))
+    }
+    
+    static func randomSolidColor() -> UIColor
+    {
+        return UIColor(minRed: 0, maxRed: 1, minGreen: 0, maxGreen: 1, minBlue: 0, maxBlue: 1, minAlpha: 1, maxAlpha: 1)
+    }
+    
+    /// Produces a random color with a random alpha part
+    static func randomColor() -> UIColor
+    {
+        return UIColor(minRed: 0, maxRed: 1, minGreen: 0, maxGreen: 1, minBlue: 0, maxBlue: 1, minAlpha: 0, maxAlpha: 1)
+    }
+    
+    convenience init(minRed:CGFloat,
+        maxRed:CGFloat,
+        minGreen:CGFloat,
+        maxGreen:CGFloat,
+        minBlue:CGFloat,
+        maxBlue:CGFloat,
+        minAlpha:CGFloat,
+        maxAlpha:CGFloat)
+    {
+        self.init(red: CGFloatRandomColorComponent(minRed, maxRed),
+            green:CGFloatRandomColorComponent(minGreen, maxGreen),
+            blue:CGFloatRandomColorComponent(minBlue, maxBlue),
+            alpha:CGFloatRandomColorComponent(minAlpha, maxAlpha))
+    }
+    
+    convenience init(minHue:CGFloat,
+        maxHue:CGFloat,
+        minSaturation:CGFloat,
+        maxSaturation:CGFloat,
+        minBrightness:CGFloat,
+        maxBrightness:CGFloat,
+        minAlpha:CGFloat,
+        maxAlpha:CGFloat)
+    {
+        self.init(hue:CGFloatRandomColorComponent(minHue, maxHue),
+            saturation:CGFloatRandomColorComponent(minSaturation, maxSaturation),
+            brightness:CGFloatRandomColorComponent(minBrightness, maxBrightness),
+            alpha:CGFloatRandomColorComponent(minAlpha, maxAlpha))
     }
 }
 
@@ -326,7 +381,7 @@ private let NamedColors = [
     "yellowgreen" : UIColor(r:154, g:205, b:50),
     "warmYellow" : UIColor(r: 255, g: 221, b: 18),
     "alice" : UIColor(r: 20, g: 150, b: 187)
-
+    
 ]
 
 public let alice = UIColor(r: 20, g: 150, b: 187)
@@ -487,7 +542,7 @@ extension UIColor
         {
             self.init(red:rgb.red, green: rgb.green, blue: rgb.blue, alpha: 1)
         }
-
+        
         return nil
     }
     
@@ -495,6 +550,6 @@ extension UIColor
         {
             return NamedColors.find { (name, color) -> Bool in
                 return color == self
-            }?.0
+                }?.0
     }
 }

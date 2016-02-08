@@ -90,9 +90,8 @@ public func cubicBezierPoint(a: CGPoint, b : CGPoint, c : CGPoint, d : CGPoint, 
 /**
  evaluate a point on a quadratic Bézier curves using definition
  - parameter a: begin point
- - parameter b: control point 1
- - parameter c: control point 2
- - parameter d: end point
+ - parameter b: control point
+ - parameter c: end point
  - parameter t: percentage of distance traveled from begin point to end point, defaults to 0.5
  */
 public func quadraticBezierPoint(a: CGPoint, b : CGPoint, c : CGPoint, t: CGFloat = 0.5) -> CGPoint

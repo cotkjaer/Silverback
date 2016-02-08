@@ -125,16 +125,3 @@ public extension Double
     }
 }
 
-// MARK: - Random Color
-
-extension UIColor
-{
-    static func randomColor() -> UIColor
-    {
-        return UIColor(red: CGFloat(Double.random(lower: 0, upper: 1)),
-            green: CGFloat(Double.random(lower: 0, upper: 1)),
-            blue: CGFloat(Double.random(lower: 0, upper: 1)),
-            alpha: 1)
-    }
-}
-

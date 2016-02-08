@@ -39,7 +39,7 @@ private class Link<E>
     }
 }
 
-struct LinkedList<Element>
+public struct LinkedList<Element>
 {
     private var array = Array<Element>()
     

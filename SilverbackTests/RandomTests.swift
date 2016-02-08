@@ -34,8 +34,8 @@ class RandomTests: XCTestCase {
             
             for (_, count) in counters
             {
-                XCTAssertGreaterThan(count, Int(0.9 * ratio))
-                XCTAssertLessThan(count,  Int(1.1 * ratio))
+                XCTAssertGreaterThan(count, Int(0.75 * ratio))
+                XCTAssertLessThan(count,  Int(1.25 * ratio))
             }
             
             let M = max(counters.values)!
@@ -74,6 +74,4 @@ class RandomTests: XCTestCase {
             XCTAssertLessThan(count,  (iterations * 11) / ( outcomes * 10))
         }
     }
-
-    
 }

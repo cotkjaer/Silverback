@@ -111,8 +111,6 @@ class ByteBufferTests: XCTestCase {
     func testByteBufferable()
     {
         let buffer = ByteBuffer()
-
-        XCTAssert(Byte(1) is ByteBufferable)
         
         buffer.write(Byte(12))
         

@@ -17,18 +17,11 @@ extension UIImage
         UIImagePNGRepresentation(self)?.writeToFile(fullFilePath, atomically:false)
     }
     
-    
-    
     private func save(optionalData: NSData?, basefilename: String, ext: String) -> Bool
     {
-        if let data = optionalData,
-            let documentDirectoryURL = NSFileManager.documentsDirectoryURL()
+        if let URL = NSFileManager.documentURLFor(basefilename, fileExtension: ext)
         {
-            let fileURL = documentDirectoryURL.URLByAppendingPathComponent(basefilename).URLByAppendingPathExtension(ext)
-            
-            debugPrint("Saving \(fileURL.path)")
-            
-            return data.writeToURL(fileURL, atomically: true)
+            return optionalData?.writeToURL(URL, atomically: true) ?? false
         }
         
         return false
@@ -63,7 +56,6 @@ extension UIImage
     private func tintedImageWithColor(tintColor: UIColor, blendingMode blendMode: CGBlendMode) -> UIImage
     {
         let bounds = CGRect(origin: CGPointZero, size: size)
-//        let bounds = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
 
@@ -81,16 +73,6 @@ extension UIImage
         }
         
         return UIGraphicsGetImageFromCurrentImageContext()
-    }
-}
-
-// MARK: - Color
-
-extension UIImage
-{
-    public class func imageFromColor(color: UIColor) -> UIImage
-    {
-        return color.image
     }
 }
 

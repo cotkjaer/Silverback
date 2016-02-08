@@ -124,25 +124,6 @@ extension CGPoint
     }
 }
 
-/**
- Linear interpolation for array of points, usefull for calculating Bézier curve points using DeCasteljau subdivision algorithm
- 
- - parameter points: the points
- - parameter t: 'time' traveled from `points[i]` to `ppints[i+1]`, **must** be in the closed unit interval [0,1], defaults to 0.5
- - returns: If `points.count < 2` `points` itself will be returned. Else an interpolation between all neighbouring points in `points` for the 'time' parameter `t` (the resulting Array will be one shorter than the original `points`)
- */
-//public func lerp(points: [CGPoint], t: CGFloat) -> [CGPoint]
-//{
-//    let count = points.count
-//    
-//    guard count > 1 else { return points }
-//    
-//    return 1.stride(to: count, by: 1).map { i in lerp(points[i - 1], points[i], t) }
-//    
-//    //    return Array(1..<count).map { lerp(points[$0-1], points[$0], t) }
-//}
-
-
 public func rotate(point p1:CGPoint, radians: CGFloat, around p2:CGPoint) -> CGPoint
 {
     let sinTheta = sin(radians)

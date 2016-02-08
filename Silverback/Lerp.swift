@@ -48,19 +48,6 @@ extension CGPoint: Lerpable
     public typealias FactorType = CGFloat
 }
 
-///**
-// Precise linear interpolation function which guarantees *lerp(a,b,0) == a && lerp(a,b,1) == b*
-// 
-// - parameter a: begin point
-// - parameter b: end point
-// - parameter t: 'time' traveled from *a* to *b*, **must** be in the closed unit interval [0,1], defaults to 0.5
-// - returns: An interpolation between points *a* and *b* for the 'time' parameter *t*
-// */
-//public func lerp(a: CGPoint, _ b: CGPoint, _ t: CGFloat = 0.5) -> CGPoint
-//{
-//    return CGPoint(x: lerp(a.x, b.x, t), y: lerp(a.y,b.y,t))
-//}
-
 extension CGSize: Lerpable
 {
     public typealias FactorType = CGFloat

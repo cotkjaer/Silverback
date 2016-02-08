@@ -20,7 +20,6 @@ public class HexView: UIView
     
     override public var bounds : CGRect { didSet { if bounds != oldValue { prepareHex() } } }
     
-    
     override public var frame : CGRect { didSet { if frame.size != oldValue.size { prepareHex() } } }
     
     /// returns true if the point (which must be in the views coordinate system) is inside (or on) the hex border

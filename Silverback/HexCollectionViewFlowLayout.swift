@@ -157,26 +157,6 @@ public class HexCollectionViewFlowLayout: UICollectionViewFlowLayout
         return false
     }
     
-    //    private var lastIndexPath : NSIndexPath?
-    //        {
-    //            if let collectionView = self.collectionView
-    //            {
-    //                let section = collectionView.numberOfSections() - 1
-    //
-    //                if section >= 0
-    //                {
-    //                    let item = collectionView.numberOfItemsInSection(section) - 1
-    //
-    //                    if item >= 0
-    //                    {
-    //                        return NSIndexPath(forItem: item, inSection: section)
-    //                    }
-    //                }
-    //            }
-    //
-    //            return nil
-    //    }
-    
     private var cachedCollectionViewContentSize : CGSize?
     
     override public func collectionViewContentSize() -> CGSize

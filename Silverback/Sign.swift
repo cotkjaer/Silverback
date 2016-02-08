@@ -35,6 +35,7 @@ public func sameSign<N:IntegerLiteralConvertible where N:Comparable>(lhs: N, _ r
     return false
 }
 
+
 public func degrees2radians(degrees: Float) -> Float
 {
     return (degrees * Float(M_PI)) / Float(180)

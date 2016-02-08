@@ -17,6 +17,7 @@ public class Task
     ///The number of scheduled executions
     private(set) var scheduled = 0
     
+    ///The captured closure
     private var closure : (() -> ())
     
     /// Capture and retain a closure
@@ -115,7 +116,7 @@ public class Task
         schedule(date)
     }
     
-    /// Ececutes the closure now
+    /// Executes the closure now
     public func execute()
     {
         closure()

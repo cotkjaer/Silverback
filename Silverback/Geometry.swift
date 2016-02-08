@@ -12,7 +12,6 @@ import CoreGraphics
 /// π/2 ~ 3,141592653589793
 public let π = CGFloat(M_PI)
 
-
 /// 2 * π ~ 6,28318530717959
 public let π2 = π * 2
 

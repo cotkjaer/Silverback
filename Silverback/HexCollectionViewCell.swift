@@ -33,14 +33,6 @@ class HexCollectionViewCell: UICollectionViewCell
         super.init(coder: aDecoder)
         setup()
     }
-    
-//    private func updateBackgrounds()
-//    {
-//        backgroundHexView.updateBorder()
-//        selectedBackgroundHexView.updateBorder()
-//    }
-//    
-//    override var bounds: CGRect { didSet { updateBackgrounds() } }
 }
 
 

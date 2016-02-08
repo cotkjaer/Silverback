@@ -10,9 +10,9 @@ import Foundation
 
 // MARK: - Document Directory
 
-extension NSFileManager
+public extension NSFileManager
 {
-    public class func documentsDirectoryURL() -> NSURL?
+    class func documentsDirectoryURL() -> NSURL?
     {
         if let path = documentDirectoryPath()
         {
@@ -22,7 +22,12 @@ extension NSFileManager
         return nil
     }
     
-    public class func documentDirectoryPath() -> String?
+    class func documentURLFor(fileName: String, fileExtension: String) -> NSURL?
+    {
+        return documentsDirectoryURL()?.URLByAppendingPathComponent(fileName).URLByAppendingPathExtension(fileExtension)
+    }
+    
+    class func documentDirectoryPath() -> String?
     {
         return NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).last
     }
