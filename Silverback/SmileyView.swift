@@ -25,9 +25,15 @@ public class SmileyView: UIView
         setup()
     }
     
+    public override func awakeFromNib()
+    {
+        super.awakeFromNib()
+        setup()
+    }
+    
     func setup()
     {
-        roundCorners()
+        super.backgroundColor = UIColor.clearColor()
     }
     
     @IBInspectable
@@ -59,20 +65,31 @@ public class SmileyView: UIView
     public var minLineThickness: CGFloat = 1 { didSet { setNeedsDisplay() } }
     
     @IBInspectable
-    public var lineColor: UIColor? = nil { didSet { setNeedsDisplay() } }
-
-    @IBInspectable
-    public var faceColor: UIColor = UIColor.whiteColor() { didSet { setNeedsDisplay() } }
-    
-    @IBInspectable
     public var faceBorder : Bool = true { didSet { setNeedsDisplay() } }
     
-    override public var bounds : CGRect { didSet { roundCorners(); setNeedsDisplay() } }
+    private var faceColor : UIColor? = UIColor.whiteColor() { didSet { setNeedsDisplay() } }
+    
+    override public var backgroundColor: UIColor? {
+        
+        set { faceColor = newValue }
+        get { return faceColor }
+        
+    }
+    
+    @IBInspectable
+    public var color: UIColor? = nil { didSet { setNeedsDisplay() } }
+    
+    override public var bounds : CGRect { didSet { setNeedsDisplay() } }
+    
+    override public func tintColorDidChange()
+    {
+        if color == nil { setNeedsDisplay() }
+    }
     
     override public func drawRect(rect: CGRect)
     {
-        (lineColor ?? tintColor)?.setStroke()
-        faceColor.setFill()
+        (color ?? tintColor).setStroke()
+        backgroundColor?.setFill()
         
         let center = bounds.center
         
@@ -107,7 +124,7 @@ public class SmileyView: UIView
         
         smilePath.stroke()
         
-        (lineColor ?? tintColor)?.setFill()
+        (color ?? tintColor).setFill()
 
         let eyeCenter = CGPoint(x: center.x, y: center.y - radius * eyeHeight)
         let eyeCenterDelta = CGPoint(x: linewidth + radius * eyeWidth, y: 0)

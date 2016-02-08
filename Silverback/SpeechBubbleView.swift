@@ -25,6 +25,12 @@ public class SpeechBubbleView: UIView
         setup()
     }
     
+    public override func awakeFromNib()
+    {
+        super.awakeFromNib()
+        setup()
+    }
+    
     func setup()
     {
         super.backgroundColor = UIColor.clearColor()
