@@ -104,32 +104,6 @@ extension NSDate
     }
 }
 
-//MARK: - Bytes
-
-extension NSDate : BytesConvertible
-{
-    public func toBytes() -> [Byte]
-    {
-        return timeIntervalSinceReferenceDate.toBytes()
-    }
-    
-    public typealias FromBytesConvertibleType = NSDate
-    
-    public static func fromBytes(bytes: [Byte], offset: Int) throws -> (Int, NSDate)
-    {
-        let (o, timeIntervalSinceReferenceDate) = try Double.fromBytes(bytes, offset: offset)
-        
-        let date = NSDate(timeIntervalSinceReferenceDate: timeIntervalSinceReferenceDate)
-        
-        return (o, date)
-    }
-
-    public static func read(buffer: ByteBuffer) throws -> Self
-    {
-        return self.init(timeIntervalSinceReferenceDate: try buffer.read())
-    }
-}
-
 //MARK: - Image
 
 extension NSData

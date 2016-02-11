@@ -76,19 +76,9 @@ public class WarpedLabel: UIImageView
                 CGContextTranslateCTM(context, 0, frame.size.height)
                 CGContextScaleCTM(context, 1, -1)
                 
-//                if let bgColor = backgroundColor
-//                {
-//                    let bgPath = UIBezierPath(rect: CGRect(origin: CGPointZero, size: frame.size))
-//                    
-//                    bgColor.setFill()
-//                    
-//                    bgPath.fill()
-//                }
-//                
                 (textColor ?? tintColor).setFill()
                 
                 warpedTextPath.fill()
-                
             }
             
             image = UIGraphicsGetImageFromCurrentImageContext()

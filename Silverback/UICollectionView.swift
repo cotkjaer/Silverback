@@ -271,7 +271,7 @@ public extension UICollectionView
 
 public extension UICollectionView
 {
-    public var lastIndexPath : NSIndexPath?
+    var lastIndexPath : NSIndexPath?
         {
             let section = numberOfSections() - 1
             
@@ -288,7 +288,7 @@ public extension UICollectionView
             return nil
     }
     
-    public var firstIndexPath : NSIndexPath?
+    var firstIndexPath : NSIndexPath?
         {
             if numberOfSections() > 0
             {
@@ -331,7 +331,7 @@ class PaginationCollectionViewFlowLayout: UICollectionViewFlowLayout
     {
         if let layoutAttributesList = super.layoutAttributesForElementsInRect(rect)
         {
-            return layoutAttributesList.map( self.applySelectedTransform )
+            return layoutAttributesList.flatMap( self.applySelectedTransform )
         }
         
         return nil

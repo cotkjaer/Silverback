@@ -56,10 +56,11 @@ public extension SequenceType
     
     ///Return true iff **all** the elements in self satisfies `predicate`
     @warn_unused_result
-    func all(@noescape predicate: (Self.Generator.Element) throws -> Bool) rethrows -> Bool
+    func all(@noescape predicate: (Generator.Element) throws -> Bool) rethrows -> Bool
     {
         return try !any{ try !predicate($0) }
     }
+    
     
     /**
     counts the elements accepted by `predicate`
@@ -105,6 +106,47 @@ public extension SequenceType
         return nil
     }
 }
+
+// MARK: - Iterate
+
+public extension SequenceType
+{
+    /**
+     Iterates on each element of the array.
+     
+     - parameter closure: Function to call for each index x element, setting the stop parameter to true will stop the iteration
+     */
+    public func iterate(closure: ((index: Int, element: Generator.Element, inout stop: Bool) -> ()))
+    {
+        var stop : Bool = false
+        
+        for (index, element) in enumerate()
+        {
+            closure(index: index, element: element, stop: &stop)
+            
+            if stop { break }
+        }
+    }
+    
+    /**
+     Iterates on each element of the array with its index.
+     
+     - parameter call: Function to call for each element
+     */
+    public func iterate(closure: ((element: Generator.Element, inout stop: Bool) -> ()))
+    {
+        var stop : Bool = false
+        
+        for element in self
+        {
+            closure(element: element, stop: &stop)
+            
+            if stop { break }
+        }
+    }
+
+}
+
 
 public extension SequenceType where Generator.Element: Hashable
 {

@@ -103,8 +103,6 @@ public func -= (inout rhs: CGFloat, lhs: Int)
 
 // MARK: - Angles
 
-internal let sin60 : CGFloat = 0.866025403784439
-
 extension CGFloat
 {
 //    static let π = CGFloat(M_PI)

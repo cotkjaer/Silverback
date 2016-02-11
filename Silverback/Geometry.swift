@@ -38,16 +38,13 @@ public let π_16 = π_4 / 4
  */
 public func minimumDistanceBetweenLineSegment(v: CGPoint, _ w: CGPoint, _ p: CGPoint) -> CGFloat
 {
-    if v == w { return distance(v, p) }
+    if v == w { return v.distanceTo(p) }
     
-    // Return minimum distance between line segment vw and point p
-    //    const float l2 = length_squared(v, w);  // i.e. |w-v|^2 -  avoid a sqrt
-    
+    // |w-v|^2 - avoid a squareroot
     let l2 = v.distanceSquaredTo(w)
     
     // Consider the line extending the segment, parameterized as v + t (w - v).
-    // We find projection of point p onto the line.
-    // It falls where t = [(p-v) . (w-v)] / |w-v|^2
+    // The projection of point p onto that line falls where t = [(p-v) . (w-v)] / |w-v|^2
     let t = dot(p - v, w - v) / l2
     
     if t < 0 // Beyond the 'v' end of the segment
@@ -74,32 +71,4 @@ public func minimumDistanceBetweenLineSegment(v: CGPoint, _ w: CGPoint, _ p: CGP
 public func distance(lineSegment:(CGPoint, CGPoint), _ point: CGPoint) -> CGFloat
 {
     return minimumDistanceBetweenLineSegment(lineSegment.0, lineSegment.1, point)
-    //    let v = lineSegment.0
-    //    let w = lineSegment.1
-    //    let p = point
-    //
-    //    if v == w { return distance(v, p) }
-    //
-    //    // Return minimum distance between line segment vw and point p
-    //
-    //    let l = distanceSquared(v, w)
-    //
-    //    // Consider the line extending the segment, parameterized as v + t (w - v).
-    //    // We find projection of point p onto the line.
-    //    // It falls where t = [(p-v) . (w-v)] / |w-v|^2
-    //    let t = dot(p - v, w - v) / l
-    //
-    //    if t < 0 // Beyond the 'v' end of the segment
-    //    {
-    //        return distance(p, v)
-    //    }
-    //    else if t > 1 // Beyond the 'w' end of the segment
-    //    {
-    //        return distance(p, w)
-    //    }
-    //    else // Projection falls on the segment
-    //    {
-    //        let projection = (1-t) * v + t * w// v + t * (w - v)
-    //        return distance(p, projection)
-    //    }
 }

@@ -10,7 +10,7 @@ import Foundation
 
 //MARK: - Functional Inits
 
-extension Array
+public extension Array
 {
     /// Init with elements produced by calling `block`, `count`times.
     init(count: Int, @noescape block: (Int) -> Element)
@@ -23,7 +23,7 @@ extension Array
         }
     }
     
-    /// Init with elements produced by `block`. 
+    /// Init with elements produced by calling `block` until it returns `nil`.
     /// -warning: Calls `block` until it returns nil
     init(@noescape block: () -> Element?)
     {
@@ -40,17 +40,13 @@ extension Array
 // MARK: - Safe versions of standard array operations
 public extension Array
 {
-    @warn_unused_result func map<U>(transform: Element -> U?) -> Array<U>
-    {
-        return flatMap(transform)
-    }
-    
     /**
     Gets the element at the specified optional index, if it exists and is within the arrays bounds.
     
     - parameter optionaleIndex: the optional index to look up
     - returns: the element at the index in self
     */
+    @warn_unused_result
     public func get(optionaleIndex: Int?) -> Element?
     {
         if let index = optionaleIndex
@@ -63,32 +59,9 @@ public extension Array
         
         return nil
     }
-}
-
-// MARK: - Optional versions of standard methods
-
-public extension Array where Element : Equatable
-{
-    ///Returns the first index where `optionalElement` appears in `self` or `nil` if `optionalElement` is not found.
-    public func indexOf(optionalElement: Element?) -> Index?
-    {
-        return indexOf{ $0 == optionalElement }
-    }
     
-    ///Returns the first element that is equal to `optionalElement` or `nil` if `optionalElement` is not found.
-    @warn_unused_result
-    func find(optionalElement: Element?) -> Element?
-    {
-        return find{ $0 == optionalElement }
-    }
-}
-
-// MARK: - List operations
-public extension Array
-{
     /// appends an optional element to the array
     /// - returns: `element` if the element was appended, `nil` otherwise
-    @warn_unused_result
     mutating func append(optionalElement: Element?) -> Element?
     {
         if let element = optionalElement
@@ -99,7 +72,31 @@ public extension Array
         
         return nil
     }
+    
+}
 
+// MARK: - Optional versions of standard methods
+
+public extension Array where Element : Equatable
+{
+    ///Returns the first index where `optionalElement` appears in `self` or `nil` if `optionalElement` is not found.
+    @warn_unused_result
+    public func indexOf(optionalElement: Element?) -> Index?
+    {
+        return indexOf{ $0 == optionalElement }
+    }
+    
+    ///Returns the first element that is equal to `optionalElement` or `nil` if `optionalElement` is not found.
+    @warn_unused_result
+    public func find(optionalElement: Element?) -> Element?
+    {
+        return find{ $0 == optionalElement }
+    }
+}
+
+// MARK: - List operations
+public extension Array
+{
     var tail : Array<Element>?
         {
             switch count
@@ -114,29 +111,6 @@ public extension Array
     
     var head : Element? { return first }
 }
-
-//// MARK: - Set-like operations
-//public func intersect<E: Equatable>(arrays: [E]...) -> [E]
-//{
-//    switch arrays.count
-//    {
-//    case 0:
-//        return []
-//        
-//    case 1:
-//        return arrays[0]
-//        
-//    case 2:
-//        
-//        return arrays[0].filter({ arrays[1].indexOf($0) != nil })
-//        
-//    default:
-//        
-//        return arrays.reduce(arrays[0], combine: { (intersection, array) -> [E] in
-//            intersection.filter({ array.indexOf($0) != nil })
-//        })
-//    }
-//}
 
 public extension Array
 {
@@ -168,14 +142,16 @@ public extension Array
     */
     func mapToSet<E:Hashable>(@noescape transform: (Element -> E?)) -> Set<E>
     {
-        return reduce(Set<E>()) {
-            (var set, element) in
-            if let setElement = transform(element)
-            {
-                set.insert(setElement)
-            }
-            return set
-        }
+        return Set(flatMap(transform))
+        
+//        return reduce(Set<E>()) {
+//            (var set, element) in
+//            if let setElement = transform(element)
+//            {
+//                set.insert(setElement)
+//            }
+//            return set
+//        }
     }
     
     /**
@@ -205,7 +181,12 @@ public extension Array
     {
         return find({$0 is T}) as? T
     }
-    
+}
+
+// MARK: - Shuffle
+
+public extension Array
+{
     /**
     Randomly rearranges (shuffles) the elements of self using the [Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher–Yates_shuffle)
     */
@@ -238,7 +219,12 @@ public extension Array
         
         return shuffled
     }
-    
+}
+
+// MARK: - Random
+
+public extension Array
+{
     /**
     Picks a random element from the array
     
@@ -256,71 +242,13 @@ public extension Array
             return self[Int.random(lower: 0, upper: count-1)]
         }
     }
-    
-    /**
-    Iterates on each element of the array.
-    
-    - parameter closure: Function to call for each index x element, setting the stop parameter to true will stop the iteration
-    */
-    public func iterate(closure: ((index: Int, element: Element, inout stop: Bool) -> ()))
-    {
-        var stop : Bool = false
-        
-        for (index, element) in enumerate()
-        {
-            closure(index: index, element: element, stop: &stop)
-            
-            if stop { break }
-        }
-    }
-    
-    /**
-    Iterates on each element of the array with its index.
-    
-    - parameter call: Function to call for each element
-    */
-    public func iterate(closure: ((element: Element, inout stop: Bool) -> ()))
-    {
-        var stop : Bool = false
-        
-        for element in self
-        {
-            closure(element: element, stop: &stop)
-            
-            if stop { break }
-        }
-    }
-    
-    /**
-    Checks if test returns true for any element of self.
-    
-    - parameter test: Function to call for each element
-    - returns: true if test returns true for any element of self
-    */
-    func any(@noescape test: (Element) -> Bool) -> Bool
-    {
-        return find(test) != nil
-    }
-    
-    /**
-    Checks if test returns true for all the elements in self
-    
-    - parameter test: Function to call for each element
-    - returns: True if test returns true for all the elements in self
-    */
-    func all(test: (Element) -> Bool) -> Bool
-    {
-        for item in self
-        {
-            if !test(item)
-            {
-                return false
-            }
-        }
-        
-        return true
-    }
-    
+}
+
+// MARK: - Iterate
+
+public extension Array
+{
+ 
     /**
     Opposite of filter.
     
@@ -454,7 +382,7 @@ public extension Array
     @warn_unused_result
     func cast<T>(type: T.Type) -> Array<T>
     {
-        return map{ $0 as? T }
+        return flatMap { $0 as? T }
     }
     
     /**
@@ -730,11 +658,9 @@ public extension Array
     }
 }
 
-
-
-
 // MARK: List , Queue and Stack operations
-public extension Array {
+public extension Array
+{
     /**
     Treats the array as a Stack; removing the last element of the array and returning it.
     
@@ -742,9 +668,7 @@ public extension Array {
     */
     mutating func pop() -> Element?
     {
-        if isEmpty { return nil }
-        
-        return removeLast()
+        return isEmpty ? nil : removeLast()
     }
     
     /**
@@ -771,9 +695,7 @@ public extension Array {
     */
     mutating func shift() -> Element?
     {
-        if isEmpty { return nil }
-        
-        return removeAtIndex(0)
+        return isEmpty ? nil : removeFirst()
     }
     
     /**

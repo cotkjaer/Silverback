@@ -23,7 +23,15 @@ class ArcLayer: CAShapeLayer
     
     var arcWidth : CGFloat
         {
-        set { lineWidth = newValue }
+        set
+        {
+            if lineWidth != newValue
+            {
+                lineWidth = newValue
+                updatePath()
+            }
+
+        }
         get { return lineWidth }
     }
     
@@ -39,9 +47,10 @@ class ArcLayer: CAShapeLayer
         set { strokeColor = newValue }
         get { return strokeColor ?? UIColor.clearColor().CGColor }
     }
+
+    // MARK: - Bounds
     
     override var bounds : CGRect { didSet { updatePath() } }
-//    override var frame : CGRect { didSet { updatePath() } }
     
     // MARK: - Init
     
@@ -86,16 +95,13 @@ class ArcLayer: CAShapeLayer
         
         animate(realStartAngle / π4, duration: 0.1, keyPath: "strokeStart")
         animate(realEndAngle / π4, duration: 0.1, keyPath: "strokeEnd")
-        
-//        strokeStart ><= realStartAngle / π4
-//        strokeEnd ><= realEndAngle / π4
     }
     
     // MARK: Path
     
     func updatePath()
     {
-        let radius = floor((min(frame.width, frame.height) - arcWidth) / 2)
+        let radius = floor((min(bounds.width, bounds.height) - arcWidth) / 2)
         
         let twoLoops = UIBezierPath(arcCenter: bounds.center, radius: radius, startAngle: 0, endAngle: π2, clockwise: true)
 

@@ -49,17 +49,17 @@ extension CGColor
         }
     }
     
-    public class func color(red  red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat = 1.0) -> CGColor
+    public class func color(red red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat = 1.0) -> CGColor
     {
         return UIColor(red: red, green: green, blue: blue, alpha: alpha).CGColor
     }
     
-    public class func color(white  white: CGFloat, alpha: CGFloat = 1.0) -> CGColor
+    public class func color(white white: CGFloat, alpha: CGFloat = 1.0) -> CGColor
     {
         return UIColor(white: white, alpha: alpha).CGColor
     }
     
-    public class func color(hue  hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) -> CGColor
+    public class func color(hue hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) -> CGColor
     {
         return UIColor(hue: hue, saturation: saturation, brightness: brightness, alpha: alpha).CGColor
     }

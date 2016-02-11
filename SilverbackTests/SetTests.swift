@@ -27,8 +27,8 @@ func == (lhs: A, rhs:A) -> Bool
     return lhs.hashValue == rhs.hashValue
 }
 
-class SetTests: XCTestCase {
-
+class SetTests: XCTestCase
+{
     let set0 = Set<Int>()
     let set1 = Set(1)
     let set23 = Set(2, 3)
@@ -156,5 +156,22 @@ class SetTests: XCTestCase {
         XCTAssertEqual(set, Set(2,3,4))
         
         XCTAssertEqual(set23.union(noSet), Set(2,3,4))
+    }
+    
+    func testSubsets()
+    {
+        let set123 = Set(1,2,3)
+        let set123subsets = set123.subsets()
+        let expectedSubsets = Set(Set(1),Set(2),Set(3),Set(1,2),Set(1,3),Set(2,3))
+        
+        XCTAssertEqual(set123.subsets().count, 6)
+
+        XCTAssertEqual(set123.subsets(), expectedSubsets)
+
+        let set12 = Set(1,2)
+        
+        XCTAssertEqual(set12.subsets().count, 2)
+        
+        XCTAssertEqual(set12.subsets(), Set(Set(1),Set(2)))
     }
 }

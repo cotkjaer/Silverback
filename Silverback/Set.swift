@@ -40,36 +40,36 @@ public func - <T:Hashable>(lhs: Set<T>, rhs: T?) -> Set<T>
 public extension Set
 {
     /**
-    Initializes a set from the non-nil elements in `elements`
-    
-    - parameter elements: list of optional members for the set
-    */
-    public init(_ elements: Element?...)
+     Initializes a set from the non-nil elements in `elements`
+     
+     - parameter elements: list of optional members for the set
+     */
+    init(_ elements: Element?...)
     {
         self.init(elements)
     }
     
-    public init(_ optionalMembers: [Element?])
+    init(_ optionalMembers: [Element?])
     {
         self.init(optionalMembers.flatMap{ $0 })
     }
-
-    public init(_ optionalArray: [Element]?)
+    
+    init(_ optionalArray: [Element]?)
     {
         self.init(optionalArray ?? [])
     }
     
-    public init(_ optionalArrayOfOptionalMembers: [Element?]?)
+    init(_ optionalArrayOfOptionalMembers: [Element?]?)
     {
         self.init(optionalArrayOfOptionalMembers ?? [])
     }
     
     
     /**
-    Picks a random member from the set
-    
-    - returns: A random member, or nil if set is empty
-    */
+     Picks a random member from the set
+     
+     - returns: A random member, or nil if set is empty
+     */
     @warn_unused_result
     public func random() -> Element?
     {
@@ -93,8 +93,8 @@ public extension Set
         {
             unionInPlace(s)
         }
-    }    
-
+    }
+    
     /// Insert an optional element into the set
     /// - returns: **true** if the element was inserted, **false** otherwise
     @warn_unused_result
@@ -141,38 +141,44 @@ public extension Set
     
     /// Returns **true** `optionalMember` is non-nil and contained in `self`, **flase** otherwise.
     @warn_unused_result
-    public func contains(optionalMember: Element?) -> Bool
+    func contains(optionalMember: Element?) -> Bool
     {
         return optionalMember?.containedIn(self) == true
     }
 }
 
-extension Set where Element : ByteBufferable
+// MARK: - Subsets
+
+public extension Set
 {
-    init(buffer: ByteBuffer) throws
+    /// Returns **all** the subsets of this set. That might be quite a lot!
+    @warn_unused_result
+    func subsets() -> Set<Set<Element>>
     {
-        self.init()
+        var subsets = Set<Set<Element>>()
         
-        do
+        if count > 1
         {
-            let count : Int = try buffer.read()
-            
-            for _ in (0..<count)
+            if let element = first
             {
-                insert(try Element.read(buffer))
+                subsets.insert(Set<Element>(element))
+                
+                let rest = self - element
+                
+                subsets.insert(rest)
+                
+                for set in rest.subsets()
+                {
+                    subsets.insert(set)
+                    subsets.insert(set + element)
+                }
             }
         }
-        catch let e
-        {
-            throw e
-        }
-    }
-    
-    func write(buffer: ByteBuffer)
-    {
-        buffer.write(count{ _ in true})
         
-        forEach{ $0.write(buffer) }
+        return subsets
     }
 }
+
+
+
 

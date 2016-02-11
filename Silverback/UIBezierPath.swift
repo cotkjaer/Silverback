@@ -770,11 +770,6 @@ public extension UIBezierPath
         applyTransform(CGAffineTransformMakeTranslation(center.x, center.y))
     }
     
-    convenience init(hexagonWithCenter center: CGPoint = CGPointZero, sideLength: CGFloat, orientation: HexOrientation = .Vertical)
-    {
-        self.init(convexRegularPolygonWithNumberOfSides: 6, center: center, circumscribedCircleRadius: sideLength, turned: orientation == HexOrientation.Vertical)
-    }
-    
     convenience init(pentagonWithCenter center: CGPoint = CGPointZero, sideLength: CGFloat, turned: Bool = false)
     {
         self.init(convexRegularPolygonWithNumberOfSides: 5, center: center, circumscribedCircleRadius: sideLength, turned: turned)

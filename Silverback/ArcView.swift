@@ -69,7 +69,7 @@ public class ArcView: UIView
     {
         super.layoutSubviews()
         
-        arcLayer.frame = bounds
+        updateArc()
     }
     
     public override func layoutSublayersOfLayer(layer: CALayer)
@@ -78,7 +78,7 @@ public class ArcView: UIView
         
         if layer == self.layer
         {
-            arcLayer.frame = bounds
+            updateArc()
         }
     }
     
