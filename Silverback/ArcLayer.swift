@@ -10,17 +10,17 @@ import UIKit
 
 public class ArcLayer: CAShapeLayer
 {
-    var arcStartAngle : CGFloat = 0
+    public var arcStartAngle : CGFloat = 0
         {
         didSet { updateStartAndEndStroke() }
     }
     
-    var arcEndAngle : CGFloat = π
+    public var arcEndAngle : CGFloat = π
         {
         didSet { updateStartAndEndStroke() }
     }
     
-    var arcWidth : CGFloat
+    public var arcWidth : CGFloat
         {
         set
         {
@@ -36,12 +36,12 @@ public class ArcLayer: CAShapeLayer
     
     override public var lineWidth : CGFloat { didSet { updatePath() } }
     
-    var arcClockwise : Bool = true
+    public var arcClockwise : Bool = true
         {
         didSet { updateStartAndEndStroke() }
     }
     
-    var arcColor : CGColor
+    public var arcColor : CGColor
         {
         set { strokeColor = newValue }
         get { return strokeColor ?? UIColor.clearColor().CGColor }
@@ -80,7 +80,7 @@ public class ArcLayer: CAShapeLayer
     
     // MARK: start- and end-stroke
     
-    func updateStartAndEndStroke()
+    private func updateStartAndEndStroke()
     {
         var realStartAngle = arcStartAngle.asNormalizedAngle
         var realEndAngle = arcEndAngle.asNormalizedAngle
@@ -98,7 +98,7 @@ public class ArcLayer: CAShapeLayer
     
     // MARK: Path
     
-    func updatePath()
+    private func updatePath()
     {
         let radius = floor((min(bounds.width, bounds.height) - arcWidth) / 2)
         
