@@ -30,6 +30,18 @@ public let π_8 = π_4 / 2
 /// π/16 ~ 0,19634954084936
 public let π_16 = π_4 / 4
 
+
+public struct LineSegment
+{
+    var beginPoint: CGPoint
+    var endPoint: CGPoint
+    
+    func distanceTo(point: CGPoint) -> CGFloat
+    {
+        return minimumDistanceBetweenLineSegment(beginPoint, endPoint, point)
+    }
+}
+
 /**
  Minimum distance between line segment v-w and point p
  - parameter v: line-segment begin point
