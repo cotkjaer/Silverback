@@ -53,7 +53,7 @@ public class ArcLayer: CAShapeLayer
     
     // MARK: - Init
     
-    override init()
+    override public init()
     {
         super.init()
         setup()
