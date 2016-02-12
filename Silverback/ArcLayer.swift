@@ -8,8 +8,7 @@
 
 import UIKit
 
-
-class ArcLayer: CAShapeLayer
+public class ArcLayer: CAShapeLayer
 {
     var arcStartAngle : CGFloat = 0
         {
@@ -35,7 +34,7 @@ class ArcLayer: CAShapeLayer
         get { return lineWidth }
     }
     
-    override var lineWidth : CGFloat { didSet { updatePath() } }
+    override public var lineWidth : CGFloat { didSet { updatePath() } }
     
     var arcClockwise : Bool = true
         {
@@ -50,7 +49,7 @@ class ArcLayer: CAShapeLayer
 
     // MARK: - Bounds
     
-    override var bounds : CGRect { didSet { updatePath() } }
+    override public var bounds : CGRect { didSet { updatePath() } }
     
     // MARK: - Init
     
@@ -60,12 +59,12 @@ class ArcLayer: CAShapeLayer
         setup()
     }
     
-    override init(layer: AnyObject)
+    override public init(layer: AnyObject)
     {
         super.init(layer: layer)
     }
     
-    required init?(coder aDecoder: NSCoder)
+    required public init?(coder aDecoder: NSCoder)
     {
         super.init(coder: aDecoder)
         setup()

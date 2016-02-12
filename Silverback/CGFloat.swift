@@ -10,7 +10,7 @@ import CoreGraphics
 
 //MARK: - Math
 
-extension CGFloat
+public extension CGFloat
 {
     static let 𝑒 = CGFloat(M_E)
     
