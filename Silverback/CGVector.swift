@@ -189,7 +189,7 @@ public func /= (inout vector: CGVector, factor: CGFloat)
 
 import UIKit
 
-extension CGVector
+public extension CGVector
 {
     func draw(atPoint point: CGPoint, withColor color: UIColor = UIColor.blueColor(), inContext: CGContextRef? = UIGraphicsGetCurrentContext())
     {

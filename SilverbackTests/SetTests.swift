@@ -33,11 +33,11 @@ class SetTests: XCTestCase
     let set1 = Set(1)
     let set23 = Set(2, 3)
     let set123 = Set("1","2",nil,"3", "1")
-
+    
     func testListInit()
     {
         let setset = Set(set0, set1, set23, nil)
-
+        
         XCTAssertEqual(set1.count, 1)
         XCTAssertEqual(set23.count, 2)
         XCTAssertEqual(set123.count, 3)
@@ -47,7 +47,7 @@ class SetTests: XCTestCase
         
         XCTAssertEqual(randomSet.count, 2)
     }
-
+    
     func testMap()
     {
         let setABC = Set<A>(A(), B(), A(), C(), nil, C())
@@ -55,25 +55,25 @@ class SetTests: XCTestCase
         
         XCTAssertEqual(setABC.count, 3)
         XCTAssertEqual(setBC.count, 2)
-
+        
         XCTAssert(setABC.dynamicType == Set<A>.self)
-
+        
         XCTAssert(setABC.dynamicType == setBC.dynamicType)
-
+        
         let mapped = setABC.map({ $0 as? C })
-
+        
         XCTAssert(mapped.dynamicType == Set<C>.self)
-
+        
         XCTAssertEqual(mapped.count, 1)
-
+        
         XCTAssertEqual(setABC.map{ if $0.dynamicType == A.self { return nil } ; return $0 }, setBC)
     }
-
+    
     func testSift()
     {
         let setABC = Set<A>(A(), B(), A(), C(), nil, C())
         let setBC = Set<A>(B(), C(), B(), C(), B(), C(), B(), C(), B(), C(), nil, C())
-
+        
         let filteredForC = setABC.sift({$0 is C})
         
         XCTAssert(filteredForC.dynamicType == Set<A>.self)
@@ -83,7 +83,7 @@ class SetTests: XCTestCase
         XCTAssertEqual(filteredForC, setBC.sift({ $0 is C }))
         XCTAssertEqual(setBC.filter({ $0.hashValue == 1 }).count, 0)
     }
-
+    
     func testRandom()
     {
         let numbers = Array(0..<1000)
@@ -103,7 +103,7 @@ class SetTests: XCTestCase
             {
                 XCTFail("Could not get random")
             }
-
+            
             if let r2 = set.random()
             {
                 array2.append(r2)
@@ -116,7 +116,7 @@ class SetTests: XCTestCase
         
         XCTAssertNotEqual(array1, array2)
         XCTAssertEqual(array1.count, array2.count)
-    
+        
     }
     
     func testUnion()
@@ -160,18 +160,24 @@ class SetTests: XCTestCase
     
     func testSubsets()
     {
+        let set1 = Set(1)
+        let set2 = Set(2)
+        let set3 = Set(3)
+        
+        let set12 = Set(1,2)
+        let set13 = Set(1,3)
+        let set23 = Set(2,3)
+        
         let set123 = Set(1,2,3)
-        let set123subsets = set123.subsets()
-        let expectedSubsets = Set(Set(1),Set(2),Set(3),Set(1,2),Set(1,3),Set(2,3))
+        
+        let expectedSubsets = Set(set1, set2, set3, set12, set13, set23)
         
         XCTAssertEqual(set123.subsets().count, 6)
-
+        
         XCTAssertEqual(set123.subsets(), expectedSubsets)
-
-        let set12 = Set(1,2)
         
         XCTAssertEqual(set12.subsets().count, 2)
         
-        XCTAssertEqual(set12.subsets(), Set(Set(1),Set(2)))
+        XCTAssertEqual(set12.subsets(), Set(set1, set2))
     }
 }

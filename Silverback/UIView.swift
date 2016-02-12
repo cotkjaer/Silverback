@@ -8,37 +8,6 @@
 
 import UIKit
 
-///// Normally setting the backgroundColor is enough, but not when rearranging UITableViewCells
-//@IBDesignable
-//public class ColoredView : UIView
-//{
-//    @IBInspectable
-//    public var color: UIColor = UIColor.blackColor() { didSet { setNeedsDisplay() } }
-//    
-//    override public var bounds : CGRect { didSet { setNeedsDisplay() } }
-//    
-//    public override func drawRect(rect: CGRect)
-//    {
-//        color.set()
-//        
-//        
-//        if layer.cornerRadius > 0
-//        {
-//            let path = UIBezierPath(roundedRect: bounds, cornerRadius: cornerRadius)
-//            
-//            path.fill()
-//        }
-//        else
-//        {
-//            CGContextSetShouldAntialias(UIGraphicsGetCurrentContext(), true)
-//            CGContextFillRect(UIGraphicsGetCurrentContext(), bounds)
-//        }
-//        
-////        super.drawRect(rect)
-//    }
-//}
-//
-
 //MARK: - Shadow
 
 public struct Shadow
@@ -119,9 +88,9 @@ extension UIView
 
 //MARK: - Border
 
-extension UIView
+public extension UIView
 {
-    public func roundCorners(optionalRadius: CGFloat? = nil) -> CGFloat
+    func roundCorners(optionalRadius: CGFloat? = nil) -> CGFloat
     {
         var radius = min(bounds.midX, bounds.midY)
         
@@ -136,14 +105,14 @@ extension UIView
     }
     
     @IBInspectable
-    public var borderSize : CGFloat
+    var borderSize : CGFloat
         {
         set { layer.borderWidth = newValue }
         get { return layer.borderWidth }
     }
     
     @IBInspectable
-    public var borderColor :  UIColor?
+    var borderColor :  UIColor?
         {
         set
         {
@@ -173,16 +142,16 @@ extension UIView
 
 //MARK: - Radius
 
-extension UIView
+public extension UIView
 {
-    var radius : CGFloat { return min(bounds.midX, bounds.midY) }
+    var radius : CGFloat { return min(bounds.width, bounds.height) / 2 }
 }
 
 //MARK: - Scrolling
 
-extension UIView
+public extension UIView
 {
-    public func anySubViewScrolling() -> Bool
+    func anySubViewScrolling() -> Bool
     {
         for scrollView in subviews.cast(UIScrollView)
         {
@@ -206,9 +175,9 @@ extension UIView
 
 // MARK: - Hierarchy
 
-extension UIView
+public extension UIView
 {
-    public func addToSuperView(optionalSuperView: UIView?)
+    func addToSuperView(optionalSuperView: UIView?)
     {
         if superview != optionalSuperView
         {
@@ -218,7 +187,7 @@ extension UIView
         }
     }
     
-    public var superviews : [UIView]
+    var superviews : [UIView]
         {
             var superviews = Array<UIView>()
             
@@ -237,7 +206,7 @@ extension UIView
      - parameter type: the (super)type of view to look for
      - returns: the first superview in the hierarchy encountered that is of the specified type
      */
-    public func closestSuperviewOfType<T>(type: T.Type) -> T?
+    func closestSuperviewOfType<T>(type: T.Type) -> T?
     {
         for var view = superview; view != nil; view = view?.superview
         {
@@ -250,7 +219,7 @@ extension UIView
         return nil
     }
     
-    public func subviewsOfType<T>(type: T.Type) -> [T]
+    func subviewsOfType<T>(type: T.Type) -> [T]
     {
         return subviews.reduce(subviews.cast(T), combine: { $0 + $1.subviewsOfType(T) } )
     }
@@ -261,7 +230,7 @@ extension UIView
      - parameter type: the (super)type of view to look for
      - returns: an array of views of the specified type
      */
-    public func closestSubviewsOfType<T>(type: T.Type) -> [T]
+    func closestSubviewsOfType<T>(type: T.Type) -> [T]
     {
         var views = subviews
         
@@ -287,7 +256,7 @@ extension UIView
      - parameter type: the type of view to look for
      - returns: first view of the specified type found
      */
-    public func firstSubviewOfType<T>(type: T.Type) -> T?
+    func firstSubviewOfType<T>(type: T.Type) -> T?
     {
         return closestSubviewsOfType(type).first
     }
@@ -295,11 +264,11 @@ extension UIView
 
 //MARK: - First Responder
 
-extension UIView
+public extension UIView
 {
-    public func findFirstResponder() -> UIView?
+    func findFirstResponder() -> UIView?
     {
-        if self.isFirstResponder()
+        if isFirstResponder()
         {
             return self
         }
@@ -319,19 +288,19 @@ extension UIView
 
 // MARK: - Frames
 
-extension UIView
+public extension UIView
 {
-    public func frameInView(view: UIView) -> CGRect
+    func frameInView(view: UIView) -> CGRect
     {
         return bounds.convert(fromView: self, toView: view)
     }
 }
 
-// MARK: - PNG
+// MARK: - Image
 
-extension UIView
+public extension UIView
 {
-    public func snapshot() -> UIImage
+    func snapshot() -> UIImage
     {
         UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0)
         
@@ -343,11 +312,6 @@ extension UIView
         }
         
         return UIGraphicsGetImageFromCurrentImageContext()
-    }
-    
-    public func saveAsPNG(basefilename: String)
-    {
-        snapshot().saveAsPNG(basefilename)
     }
 }
 

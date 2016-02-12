@@ -150,21 +150,14 @@ public extension UIColor
 {
     func image() -> UIImage
     {
-        let rect = CGRectMake(0, 0, 1, 1)
+        let size = CGSize(width: 1, height: 1)
         
-        UIGraphicsBeginImageContextWithOptions(rect.size, opaque, 0)
+        UIGraphicsBeginImageContextWithOptions(size, opaque, 0)
         defer { UIGraphicsEndImageContext() }
-        
-        let path = UIBezierPath(rect: rect)
         
         setFill()
         
-        path.fill()
-        
-//        let context = UIGraphicsGetCurrentContext()
-//        
-//        CGContextSetFillColorWithColor(context, self.CGColor)
-//        CGContextFillRect(context, rect)
+        UIBezierPath(rect: CGRect(origin: CGPointZero, size: size)).fill()
         
         return UIGraphicsGetImageFromCurrentImageContext()
     }

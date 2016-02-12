@@ -145,11 +145,6 @@ func cubicSplineFunction(points: [CGPoint]) -> (Int, CGFloat) -> CGFloat
         let p3 =  vX_pXk * pow_vX_pXk1 * psx[k] / phk2
         let p4 =  vX_pXk1 * pow_vX_pXk * psx[k+1] / phk2
 
-//        let p1 =  (ph[k] + 2 * (vX - px[k])) * ((vX - px[k+1]) * (vX - px[k+1])) * py[k] / (ph[k] * ph[k] * ph[k])
-//        let p2 =  (ph[k] - 2 * (vX - px[k+1])) * pow((vX - px[k]), 2) * py[k+1] / pow(ph[k], 3)
-//        let p3 =  (vX - px[k]) * pow((vX - px[k+1]), 2) * psx[k] / pow(ph[k], 2)
-//        let p4 =  (vX - px[k+1]) * pow((vX - px[k]), 2) * psx[k+1] / pow(ph[k], 2)
-
         return p1 + p2 + p3 + p4
     }
     
